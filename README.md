@@ -1,1 +1,1 @@
-# spotify-dashboard
+# Spotify Dashboard
