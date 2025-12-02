@@ -16,3 +16,8 @@ export interface ClientToken {
   token_type: 'Bearer';
   expires_in: number;
 }
+
+export interface UserToken extends ClientToken {
+  scope: string;
+  refresh_token: string;
+}

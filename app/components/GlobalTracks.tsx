@@ -1,11 +1,11 @@
-import type { TrackProps } from '../types';
+import type { TrackProps } from '../lib/schemas';
 
 const GlobalTracks = ({ items }: TrackProps) => {
   return (
     <ul>
       {items.map((item) => (
         <li key={item.track?.id}>
-          {item.track?.artists?.map((a) => a.name).join(', ')} - {item.track?.name}
+          {item.track?.artists.map((a) => a.name).join(', ')} — {item.track?.name}
         </li>
       ))}
     </ul>

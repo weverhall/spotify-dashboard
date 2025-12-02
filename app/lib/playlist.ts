@@ -1,7 +1,7 @@
 import getClientToken from './clientToken';
-import type { PlaylistProps } from '../types';
+import { PlaylistSchema } from './schemas';
 
-export const getGlobalTopTracks = async (): Promise<SpotifyApi.PlaylistTrackObject[]> => {
+const getGlobalTopTracks = async () => {
   const token = await getClientToken();
   const playlistID = '63N6kezSNEL6h7aDbQ7Ivf';
 
@@ -14,6 +14,8 @@ export const getGlobalTopTracks = async (): Promise<SpotifyApi.PlaylistTrackObje
     throw new Error(`Failed to fetch playlist tracks: ${res.status} ${text}`);
   }
 
-  const data = (await res.json()) as PlaylistProps;
+  const data = PlaylistSchema.parse(await res.json());
   return data.items;
 };
+
+export default getGlobalTopTracks;

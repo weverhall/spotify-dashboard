@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getGlobalTopTracks } from '../../lib/playlist';
+import getGlobalTopTracks from '../../lib/playlist';
 
 export const GET = async () => {
   try {
