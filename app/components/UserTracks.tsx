@@ -1,4 +1,4 @@
-export default function UserTracks() {
+const UserTracks = () => {
   return (
     <table>
       <thead>
@@ -15,4 +15,6 @@ export default function UserTracks() {
       </tbody>
     </table>
   );
-}
+};
+
+export default UserTracks;

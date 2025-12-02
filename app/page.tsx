@@ -1,10 +1,15 @@
 import GlobalTracks from './components/GlobalTracks';
+import { getGlobalTopTracks } from './lib/playlist';
 
-export default function FrontPage() {
+const Home = async () => {
+  const items = await getGlobalTopTracks();
+
   return (
-    <div>
-      <h1>hello frontpage</h1>
-      <GlobalTracks />
-    </div>
+    <main>
+      <h1>Global Top 50</h1>
+      <GlobalTracks items={items} />
+    </main>
   );
-}
+};
+
+export default Home;

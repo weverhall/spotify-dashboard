@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { getGlobalTopTracks } from '../../lib/playlist';
+import getClientToken from '../../lib/clientToken';
 
 export const GET = async () => {
   try {
-    const items = await getGlobalTopTracks();
-    return NextResponse.json(items);
+    const token = await getClientToken();
+    return NextResponse.json({ token });
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 });
   }

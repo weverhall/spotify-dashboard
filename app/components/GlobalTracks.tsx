@@ -1,18 +1,15 @@
-export default function GlobalTracks() {
+import type { TrackProps } from '../types';
+
+const GlobalTracks = ({ items }: TrackProps) => {
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>top global artist</th>
-          <th>top global track</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>artist</td>
-          <td>track</td>
-        </tr>
-      </tbody>
-    </table>
+    <ul>
+      {items.map((item) => (
+        <li key={item.track?.id}>
+          {item.track?.artists?.map((a) => a.name).join(', ')} - {item.track?.name}
+        </li>
+      ))}
+    </ul>
   );
-}
+};
+
+export default GlobalTracks;
