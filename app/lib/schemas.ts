@@ -1,11 +1,5 @@
 import { z } from 'zod';
 
-export const ClientTokenSchema = z.object({
-  access_token: z.string(),
-  token_type: z.literal('Bearer'),
-  expires_in: z.number(),
-});
-
 const ArtistSchema = z.object({
   id: z.string().nullable(),
   name: z.string(),
@@ -29,19 +23,27 @@ const PlaylistTrackSchema = z.object({
   track: TrackSchema.nullable(),
 });
 
+// only the tracks array object of playlist.tracks.items w/o metadata
 export const PlaylistTracksSchema = z.object({
   items: z.array(PlaylistTrackSchema),
 });
 
-export const PlaylistSchema = PlaylistTracksSchema.extend({
-  href: z.string(),
-  limit: z.number(),
-  next: z.string().nullable(),
-  offset: z.number(),
-  previous: z.string().nullable(),
-  total: z.number(),
+export const ClientTokenSchema = z.object({
+  access_token: z.string(),
+  token_type: z.literal('Bearer'),
+  expires_in: z.number(),
 });
 
-export type TrackProps = z.infer<typeof PlaylistTracksSchema>;
-export type Playlist = z.infer<typeof PlaylistSchema>;
+export const AuthTokenSchema = ClientTokenSchema.extend({
+  refresh_token: z.string(),
+  scope: z.string(),
+});
+
+export const CookieSchema = z.object({
+  session_id: z.string().length(64),
+});
+
+export type PlaylistTracks = z.infer<typeof PlaylistTracksSchema>;
 export type ClientToken = z.infer<typeof ClientTokenSchema>;
+export type AuthToken = z.infer<typeof AuthTokenSchema>;
+export type Cookie = z.infer<typeof CookieSchema>;

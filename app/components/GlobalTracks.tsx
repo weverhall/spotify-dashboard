@@ -1,6 +1,6 @@
-import type { TrackProps } from '../lib/schemas';
+import type { PlaylistTracks } from '../lib/schemas';
 
-const GlobalTracks = ({ items }: TrackProps) => {
+const GlobalTracks = ({ items }: PlaylistTracks) => {
   return (
     <ul>
       {items.map((item) => (

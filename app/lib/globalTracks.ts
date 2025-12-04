@@ -1,7 +1,7 @@
-import getClientToken from './clientToken';
-import { PlaylistSchema } from './schemas';
+import getClientToken from './auth/clientToken';
+import { PlaylistTracksSchema, PlaylistTracks } from './schemas';
 
-const getGlobalTopTracks = async () => {
+const getGlobalTopTracks = async (): Promise<PlaylistTracks['items']> => {
   const token = await getClientToken();
   const playlistID = '63N6kezSNEL6h7aDbQ7Ivf';
 
@@ -14,7 +14,7 @@ const getGlobalTopTracks = async () => {
     throw new Error(`Failed to fetch playlist tracks: ${res.status} ${text}`);
   }
 
-  const data = PlaylistSchema.parse(await res.json());
+  const data = PlaylistTracksSchema.parse(await res.json());
   return data.items;
 };
 

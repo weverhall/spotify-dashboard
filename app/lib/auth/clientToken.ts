@@ -1,4 +1,4 @@
-import { ClientTokenSchema } from './schemas';
+import { ClientTokenSchema } from '../schemas';
 
 const getClientToken = async (): Promise<string> => {
   const clientID = process.env.SPOTIFY_CLIENT_ID!;
