@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import getAuthToken from '../../../lib/auth/authToken';
 import { generateSessionID, storeSession } from '../../../lib/auth/session';
 
+const baseURL = process.env.RENDER_BASE_URL!;
+
 export const GET = async (req: Request) => {
   const { searchParams } = new URL(req.url);
   const code = searchParams.get('code');
@@ -15,7 +17,7 @@ export const GET = async (req: Request) => {
   const sessionID: string = generateSessionID();
   await storeSession(sessionID, token);
 
-  const response = NextResponse.redirect('/dashboard');
+  const response = NextResponse.redirect(`${baseURL}/dashboard`);
   response.cookies.set('session_id', sessionID, {
     httpOnly: true,
     secure: true,

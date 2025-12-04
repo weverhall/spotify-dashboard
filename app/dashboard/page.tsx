@@ -9,7 +9,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchSession = async () => {
-      const res = await fetch('/api/session');
+      const res = await fetch('/api/auth/session');
       if (!res.ok) {
         setLoading(false);
         return;
