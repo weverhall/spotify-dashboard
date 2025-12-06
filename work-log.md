@@ -12,4 +12,5 @@
 | 5.12.  | 3    | switched from vercel to render hosting and changed session related code accordingly |
 |        | 1    | confirmed that the cookie and the token do indeed go into the db, updated dependencies to patch react2shell vulnerability |
 | 6.12.  | 2    | made sure to not return user's full auth token object to the client, added token ttl fetch from redis |
-| total  | 42   | |
+|        | 5    | began to use the refresh token of my own credentials to fetch the actual global playlist contents, centralized env variables |
+| total  | 47   | |

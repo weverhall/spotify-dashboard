@@ -48,8 +48,15 @@ export const SessionSchema = z.object({
   expires_in: z.number().optional(),
 });
 
+export const ProfileSchema = z.object({
+  id: z.string(),
+  display_name: z.string().optional(),
+  email: z.string().optional(),
+});
+
 export type PlaylistTracks = z.infer<typeof PlaylistTracksSchema>;
 export type ClientToken = z.infer<typeof ClientTokenSchema>;
 export type AuthToken = z.infer<typeof AuthTokenSchema>;
 export type Cookie = z.infer<typeof CookieSchema>;
 export type Session = z.infer<typeof SessionSchema>;
+export type Profile = z.infer<typeof ProfileSchema>;

@@ -1,8 +1,7 @@
 import crypto from 'crypto';
 import { createClient, RedisClientType } from 'redis';
 import { AuthTokenSchema, AuthToken } from '../schemas';
-
-const redisURL = process.env.REDIS_URL!;
+import { env } from '../utils/config';
 
 declare global {
   var redisClient: RedisClientType;
@@ -11,7 +10,7 @@ declare global {
 let client: RedisClientType;
 
 if (!globalThis.redisClient) {
-  client = createClient({ url: redisURL });
+  client = createClient({ url: env.REDIS_URL });
   client.on('error', (err) => console.error('redis client error', err));
   await client.connect();
   globalThis.redisClient = client;
@@ -23,6 +22,10 @@ export const generateSessionID = () => crypto.randomBytes(32).toString('hex');
 
 export const storeSession = async (sessionID: string, token: AuthToken) => {
   await client.set(`session:${sessionID}`, JSON.stringify(token), { EX: 3600 });
+};
+
+export const storeAdminRefreshToken = async (token: AuthToken) => {
+  await client.set(env.REDIS_KEY_REFRESH_TOKEN, token.refresh_token);
 };
 
 export const getSession = async (sessionID: string): Promise<AuthToken | null> => {
