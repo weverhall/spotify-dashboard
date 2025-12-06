@@ -11,5 +11,5 @@
 | 4.12.  | 8    | continued working towards online spotify user login using auth token fetch and session cookie, improved project structure and typing |
 | 5.12.  | 3    | switched from vercel to render hosting and changed session related code accordingly |
 |        | 1    | confirmed that the cookie and the token do indeed go into the db, updated dependencies to patch react2shell vulnerability |
-| 6.12.  | 1    | made sure to not return user's full auth token objects to the client |
-| total  | 41   | |
+| 6.12.  | 2    | made sure to not return user's full auth token object to the client, added token ttl fetch from redis |
+| total  | 42   | |

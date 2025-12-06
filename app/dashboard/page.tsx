@@ -9,10 +9,16 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchSession = async () => {
-      const res = await fetch('/api/auth/session');
-      const data = SessionSchema.parse(res);
-      setSession(data.authenticated ? data : null);
-      setLoading(false);
+      try {
+        const res = await fetch('/api/auth/session');
+        const data = SessionSchema.parse(await res.json());
+        setSession(data.authenticated ? data : null);
+      } catch (err) {
+        console.error('Failed to fetch session', err);
+        setSession(null);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchSession();
   }, []);

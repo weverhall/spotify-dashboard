@@ -41,3 +41,9 @@ export const getSession = async (sessionID: string): Promise<AuthToken | null> =
 export const deleteSession = async (sessionID: string) => {
   await client.del(`session:${sessionID}`);
 };
+
+export const getTimeToLive = async (sessionID: string) => {
+  const ttl = await client.ttl(`session:${sessionID}`);
+  if (ttl < 0) return 0;
+  return ttl;
+};

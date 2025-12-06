@@ -5,9 +5,6 @@ export const getAuthToken = async (code: string) => {
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET!;
   const redirectURI = process.env.SPOTIFY_REDIRECT_URI!;
 
-  console.log('getAuthToken called with code:', code);
-  console.log('redirect URI:', redirectURI);
-
   const body = new URLSearchParams({
     grant_type: 'authorization_code',
     code,
@@ -22,8 +19,6 @@ export const getAuthToken = async (code: string) => {
     },
     body: body.toString(),
   });
-
-  console.log('token endpoint status:', res.status);
 
   if (!res.ok) {
     const text = await res.text();
