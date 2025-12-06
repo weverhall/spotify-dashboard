@@ -10,6 +10,9 @@ export const storeSession = async (sessionID: string, token: AuthToken) => {
 };
 
 export const storeAdminRefreshToken = async (token: AuthToken) => {
+  if (!token.refresh_token) {
+    throw new Error('no refresh token provided');
+  }
   await client.set(env.REDIS_KEY_REFRESH_TOKEN, token.refresh_token);
 };
 
