@@ -43,7 +43,13 @@ export const CookieSchema = z.object({
   session_id: z.string().length(64),
 });
 
+export const SessionSchema = z.object({
+  authenticated: z.boolean(),
+  expires_in: z.number().optional(),
+});
+
 export type PlaylistTracks = z.infer<typeof PlaylistTracksSchema>;
 export type ClientToken = z.infer<typeof ClientTokenSchema>;
 export type AuthToken = z.infer<typeof AuthTokenSchema>;
 export type Cookie = z.infer<typeof CookieSchema>;
+export type Session = z.infer<typeof SessionSchema>;

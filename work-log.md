@@ -9,4 +9,7 @@
 |        | 3    | implemented zod schemas |
 | 3.12.  | 5    | started coding vercel kv after checking out free hosting options that would offer redis-style cache and mongodb support |
 | 4.12.  | 8    | continued working towards online spotify user login using auth token fetch and session cookie, improved project structure and typing |
-| total  | 36   | |
+| 5.12.  | 3    | switched from vercel to render hosting and changed session related code accordingly |
+|        | 1    | confirmed that the cookie and the token do indeed go into the db, updated dependencies to patch react2shell vulnerability |
+| 6.12.  | 1    | made sure to not return user's full auth token objects to the client |
+| total  | 41   | |

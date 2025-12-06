@@ -5,13 +5,17 @@ import { getSession } from '../../../lib/auth/session';
 export const GET = async (_req: Request) => {
   const sessionID = await getSessionID();
   if (!sessionID) {
-    return NextResponse.json({ error: 'no session found' }, { status: 401 });
+    return NextResponse.json({ authenticated: false }, { status: 200 });
   }
 
   const token = await getSession(sessionID);
+
   if (!token) {
-    return NextResponse.json({ error: 'session expired' }, { status: 401 });
+    return NextResponse.json({ authenticated: false }, { status: 200 });
   }
 
-  return NextResponse.json(token);
+  return NextResponse.json({
+    authenticated: true,
+    expires_in: token.expires_in,
+  });
 };

@@ -1,24 +1,17 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { AuthTokenSchema, AuthToken } from '../lib/schemas';
+import { Session, SessionSchema } from '../lib/schemas';
 
 const Dashboard = () => {
-  const [token, setToken] = useState<AuthToken | null>(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSession = async () => {
       const res = await fetch('/api/auth/session');
-      if (!res.ok) {
-        setLoading(false);
-        return;
-      }
-
-      const parsed = AuthTokenSchema.safeParse(await res.json());
-      if (parsed.success) {
-        setToken(parsed.data);
-      }
+      const data = SessionSchema.parse(res);
+      setSession(data.authenticated ? data : null);
       setLoading(false);
     };
     fetchSession();
@@ -28,7 +21,7 @@ const Dashboard = () => {
     return <main>loading...</main>;
   }
 
-  if (!token) {
+  if (!session) {
     return (
       <main>
         <a href="/api/auth/login">spotify login</a>
@@ -39,7 +32,8 @@ const Dashboard = () => {
   return (
     <main>
       <h1>dashboard</h1>
-      <p>token: {token.access_token}</p>
+      <p>authenticated: {session.authenticated}</p>
+      <p>expires in: {session.expires_in} seconds</p>
     </main>
   );
 };
