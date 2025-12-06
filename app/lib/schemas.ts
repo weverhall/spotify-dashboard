@@ -35,7 +35,7 @@ export const ClientTokenSchema = z.object({
 });
 
 export const AuthTokenSchema = ClientTokenSchema.extend({
-  refresh_token: z.string(),
+  refresh_token: z.string().optional(),
   scope: z.string(),
 });
 
