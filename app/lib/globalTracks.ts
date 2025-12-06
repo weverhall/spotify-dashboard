@@ -1,12 +1,9 @@
 import { PlaylistTracksSchema, PlaylistTracks, AuthTokenSchema, AuthToken } from './schemas';
-import { createClient, RedisClientType } from 'redis';
 import { env } from './utils/config';
-
-const redis: RedisClientType = createClient({ url: env.REDIS_URL });
-redis.connect().catch(console.error);
+import client from './utils/redis';
 
 const getAccessTokenWithRefresh = async (): Promise<AuthToken['access_token']> => {
-  const refreshToken = await redis.get(env.REDIS_KEY_REFRESH_TOKEN);
+  const refreshToken = await client.get(env.REDIS_KEY_REFRESH_TOKEN);
   if (!refreshToken) throw new Error('no global refresh token found in redis');
 
   const body = new URLSearchParams({

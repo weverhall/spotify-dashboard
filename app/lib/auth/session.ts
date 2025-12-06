@@ -1,22 +1,7 @@
 import crypto from 'crypto';
-import { createClient, RedisClientType } from 'redis';
 import { AuthTokenSchema, AuthToken } from '../schemas';
 import { env } from '../utils/config';
-
-declare global {
-  var redisClient: RedisClientType;
-}
-
-let client: RedisClientType;
-
-if (!globalThis.redisClient) {
-  client = createClient({ url: env.REDIS_URL });
-  client.on('error', (err) => console.error('redis client error', err));
-  await client.connect();
-  globalThis.redisClient = client;
-} else {
-  client = globalThis.redisClient;
-}
+import client from '../utils/redis';
 
 export const generateSessionID = () => crypto.randomBytes(32).toString('hex');
 
