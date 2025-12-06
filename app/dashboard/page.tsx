@@ -38,8 +38,8 @@ const Dashboard = () => {
   return (
     <main>
       <h1>dashboard</h1>
-      <p>authenticated: {session.authenticated}</p>
-      <p>expires in: {session.expires_in} seconds</p>
+      <p>authenticated: {`${session.authenticated}`}</p>
+      <p>expires in: {`${session.expires_in}`}</p>
     </main>
   );
 };
