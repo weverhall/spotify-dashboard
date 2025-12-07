@@ -2,7 +2,12 @@ import { NextResponse } from 'next/server';
 import { env } from '../../../lib/utils/config';
 
 export const GET = () => {
-  const scopes = ['playlist-read-private', 'playlist-read-collaborative'].join(' ');
+  const scopes = [
+    'playlist-read-private',
+    'playlist-read-collaborative',
+    'user-read-email',
+    'user-read-private',
+  ].join(' ');
 
   const authURL = new URL('https://accounts.spotify.com/authorize');
   authURL.searchParams.set('response_type', 'code');

@@ -36,7 +36,7 @@ const getAccessTokenWithRefresh = async (): Promise<AuthToken['access_token']> =
 
 const getGlobalTopTracks = async (): Promise<PlaylistTracks['items']> => {
   const accessToken = await getAccessTokenWithRefresh();
-  const globalTopPlaylistID = '63N6kezSNEL6h7aDbQ7Ivf';
+  const globalTopPlaylistID = '37i9dQZEVXbMDoHDwVN2tF';
 
   const res = await fetch(`https://api.spotify.com/v1/playlists/${globalTopPlaylistID}/tracks`, {
     headers: { Authorization: `Bearer ${accessToken}` },
