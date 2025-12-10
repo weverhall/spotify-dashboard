@@ -14,4 +14,6 @@
 | 6.12.  | 2    | made sure to not return user's full auth token object to the client, added token ttl fetch from redis |
 |        | 5    | began to use the refresh token of my own credentials to fetch the actual global playlist contents |
 |        | 1    | centralized env variables and redis client creation to shared utils files |
-| total  | 48   | |
+| 7.12.  | 3    | spent hours investigating why spotify api returns 404 for all algorithmic and curated playlists, and apparently about a year ago they removed that endpoint for new api users, so currently my plan is to pivot to using some other api for global trends data |
+| 10.12. | 5    | started implementing user-specific spotify api logic and stopped trying to fetch playlist data from a deprecated endpoint with a separate non-expiring refresh token |
+| total  | 56   | |

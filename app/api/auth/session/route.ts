@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { getSessionID } from '../../../lib/auth/cookie';
 import { getSession, getTimeToLive } from '../../../lib/auth/session';
 
+// safely verifies authentication status for conditional client-side rendering
+
 export const GET = async (_req: Request) => {
   const sessionID = await getSessionID();
   if (!sessionID) {

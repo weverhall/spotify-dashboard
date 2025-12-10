@@ -54,9 +54,19 @@ export const ProfileSchema = z.object({
   email: z.string().optional(),
 });
 
+export const UserTracksSchema = z.object({
+  items: z.array(TrackSchema),
+  limit: z.number(),
+  offset: z.number(),
+  total: z.number(),
+  next: z.string().nullable(),
+  previous: z.string().nullable(),
+});
+
 export type PlaylistTracks = z.infer<typeof PlaylistTracksSchema>;
 export type ClientToken = z.infer<typeof ClientTokenSchema>;
 export type AuthToken = z.infer<typeof AuthTokenSchema>;
 export type Cookie = z.infer<typeof CookieSchema>;
 export type Session = z.infer<typeof SessionSchema>;
 export type Profile = z.infer<typeof ProfileSchema>;
+export type UserTracks = z.infer<typeof UserTracksSchema>;

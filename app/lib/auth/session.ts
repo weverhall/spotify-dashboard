@@ -1,19 +1,11 @@
 import crypto from 'crypto';
 import { AuthTokenSchema, AuthToken } from '../schemas';
-import { env } from '../utils/config';
 import client from '../utils/redis';
 
 export const generateSessionID = () => crypto.randomBytes(32).toString('hex');
 
 export const storeSession = async (sessionID: string, token: AuthToken) => {
   await client.set(`session:${sessionID}`, JSON.stringify(token), { EX: 3600 });
-};
-
-export const storeAdminRefreshToken = async (token: AuthToken) => {
-  if (!token.refresh_token) {
-    throw new Error('no refresh token provided');
-  }
-  await client.set(env.REDIS_KEY_REFRESH_TOKEN, token.refresh_token);
 };
 
 export const getSession = async (sessionID: string): Promise<AuthToken | null> => {

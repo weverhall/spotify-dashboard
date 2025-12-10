@@ -1,8 +1,8 @@
 import GlobalTracks from './components/GlobalTracks';
-import getGlobalTopTracksClient from './lib/globalTracksClient';
+import getGlobalTopTracks from './lib/globalTracks';
 
 const Home = async () => {
-  const items = await getGlobalTopTracksClient();
+  const items = await getGlobalTopTracks();
 
   return (
     <main>
