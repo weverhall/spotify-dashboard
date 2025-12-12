@@ -2,26 +2,31 @@ import { createClient, RedisClientType } from 'redis';
 import { env } from './config';
 
 declare global {
-  var redisClient: RedisClientType;
+  var redisClient: RedisClientType | undefined;
 }
 
-let client: RedisClientType;
+let client: RedisClientType | undefined;
 
-if (!globalThis.redisClient) {
-  client = createClient({
-    url: env.REDIS_URL,
-    socket: {
-      reconnectStrategy: (retries) => {
-        if (retries > 5) return new Error('could not reconnect to redis');
-        return 1000;
-      },
-    },
-  });
+export const getRedisClient = async (): Promise<RedisClientType> => {
+  if (!client) {
+    if (globalThis.redisClient) {
+      client = globalThis.redisClient;
+    } else {
+      client = createClient({
+        url: env.REDIS_URL,
+        socket: {
+          reconnectStrategy: (retries) => {
+            if (retries > 5) return new Error('could not reconnect to redis');
+            return 1000;
+          },
+        },
+      });
 
-  await client.connect();
-  globalThis.redisClient = client;
-} else {
-  client = globalThis.redisClient;
-}
+      await client.connect();
 
-export default client;
+      globalThis.redisClient = client;
+    }
+  }
+
+  return client;
+};
