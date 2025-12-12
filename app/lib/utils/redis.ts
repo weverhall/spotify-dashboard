@@ -8,8 +8,16 @@ declare global {
 let client: RedisClientType;
 
 if (!globalThis.redisClient) {
-  client = createClient({ url: env.REDIS_URL });
-  client.on('error', (err) => console.error('redis client error', err));
+  client = createClient({
+    url: env.REDIS_URL,
+    socket: {
+      reconnectStrategy: (retries) => {
+        if (retries > 5) return new Error('could not reconnect to redis');
+        return 1000;
+      },
+    },
+  });
+
   await client.connect();
   globalThis.redisClient = client;
 } else {
