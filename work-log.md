@@ -19,4 +19,5 @@
 | 12.12. | 4    | began using docker containers and localhost.run oauth callback tunneling for local dev, created a production dockerfile for render as well |
 |        | 2    | optimized dockerfiles, switched to lazy-loading of redis client, created a redirect from callback route, changed a few secrets on render to apply at build time |
 | 13.12. | 2    | implemented oauth state handling for pre-auth csrf protection |
-| total  | 64   | |
+|        | 4    | added global top tracks fetching from last.fm api, cleaned up schemas and project structure |
+| total  | 68   | |

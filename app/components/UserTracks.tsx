@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { UserTracks, UserTracksSchema } from '../lib/schemas';
+import { SpotifyUserTracks, SpotifyUserTracksSchema } from '../lib/types/schemas';
 
-const SpotifyUserTracks = () => {
-  const [tracks, setTracks] = useState<UserTracks | null>(null);
+const UserTracks = () => {
+  const [tracks, setTracks] = useState<SpotifyUserTracks | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
 
@@ -12,7 +12,7 @@ const SpotifyUserTracks = () => {
     const fetchTracks = async () => {
       try {
         const res = await fetch('/api/userTracks');
-        const data = UserTracksSchema.parse(await res.json());
+        const data = SpotifyUserTracksSchema.parse(await res.json());
         setTracks(data);
       } catch {
         setError('could not fetch user tracks');
@@ -51,4 +51,4 @@ const SpotifyUserTracks = () => {
   );
 };
 
-export default SpotifyUserTracks;
+export default UserTracks;

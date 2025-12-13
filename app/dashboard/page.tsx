@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Session, SessionSchema } from '../lib/schemas';
-import SpotifyUserTracks from '../components/SpotifyUserTracks';
+import { Session, SessionSchema } from '../lib/types/schemas';
+import UserTracks from '../components/UserTracks';
 
 const Dashboard = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -40,7 +40,7 @@ const Dashboard = () => {
       <h1>dashboard</h1>
       <p>authenticated: {`${session.authenticated}`}</p>
       <p>expires in: {`${session.expires_in}`}</p>
-      <SpotifyUserTracks />
+      <UserTracks />
     </main>
   );
 };

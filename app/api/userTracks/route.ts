@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
-import getUserTracks from '../../lib/userTracks';
+import { getUserTracks } from '../../lib/services/tracks';
 import { getSessionID } from '../../lib/auth/cookie';
 import { getSession } from '../../lib/auth/session';
-import { UserTracksSchema } from '../../lib/schemas';
+import { SpotifyUserTracksSchema } from '../../lib/types/schemas';
 
 export const GET = async () => {
   try {
@@ -16,7 +16,7 @@ export const GET = async () => {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const tracks = UserTracksSchema.parse(await getUserTracks(token.access_token));
+    const tracks = SpotifyUserTracksSchema.parse(await getUserTracks(token.access_token));
     return NextResponse.json(tracks);
   } catch {
     return NextResponse.json({ error: 'failed to fetch tracks' }, { status: 500 });

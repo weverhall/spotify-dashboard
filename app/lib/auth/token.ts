@@ -1,7 +1,7 @@
-import { AuthTokenSchema } from '../schemas';
+import { SpotifyTokenSchema } from '../types/schemas';
 import { env } from '../utils/config';
 
-export const getAuthToken = async (code: string) => {
+export const getSpotifyToken = async (code: string) => {
   const authHeader = Buffer.from(`${env.SPOTIFY_CLIENT_ID}:${env.SPOTIFY_CLIENT_SECRET}`).toString(
     'base64'
   );
@@ -26,7 +26,7 @@ export const getAuthToken = async (code: string) => {
     throw new Error(`failed to exchange code for auth token: ${text}`);
   }
 
-  return AuthTokenSchema.parse(await res.json());
+  return SpotifyTokenSchema.parse(await res.json());
 };
 
-export default getAuthToken;
+export default getSpotifyToken;

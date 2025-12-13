@@ -1,14 +1,23 @@
-import type { PlaylistTracks } from '../lib/schemas';
+import type { LastfmGlobalTracks } from '../lib/types/schemas';
 
-const GlobalTracks = ({ items }: PlaylistTracks) => {
+const GlobalTracks = ({ tracks }: { tracks: LastfmGlobalTracks }) => {
   return (
-    <ul>
-      {items.map((item) => (
-        <li key={item.track?.id}>
-          {item.track?.artists.map((a) => a.name).join(', ')} — {item.track?.name}
-        </li>
-      ))}
-    </ul>
+    <table>
+      <thead>
+        <tr>
+          <th>artist</th>
+          <th>track</th>
+        </tr>
+      </thead>
+      <tbody>
+        {tracks.map((track) => (
+          <tr key={track.mbid ?? track.name}>
+            <td>{track.artist.name}</td>
+            <td>{track.name}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 };
 

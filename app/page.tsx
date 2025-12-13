@@ -1,13 +1,13 @@
 import GlobalTracks from './components/GlobalTracks';
-import getGlobalTopTracks from './lib/globalTracks';
+import { getGlobalTracks } from './lib/services/tracks';
 
 const Home = async () => {
-  const items = await getGlobalTopTracks();
+  const tracks = await getGlobalTracks();
 
   return (
     <main>
       <h1>Global Top 50</h1>
-      <GlobalTracks items={items} />
+      <GlobalTracks tracks={tracks} />
     </main>
   );
 };

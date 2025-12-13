@@ -1,9 +1,9 @@
 import { cookies } from 'next/headers';
-import { CookieSchema } from '../schemas';
+import { CookieSchema } from '../types/schemas';
 
 export const getSessionID = async (): Promise<string | null> => {
   const cookieStore = await cookies();
-  const raw = cookieStore.get('session_id') as { value: unknown } | undefined;
+  const raw = cookieStore.get('session_id');
 
   if (!raw?.value || typeof raw.value !== 'string') return null;
 

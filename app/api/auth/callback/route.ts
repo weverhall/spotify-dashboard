@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { env } from '../../../lib/utils/config';
-import getAuthToken from '../../../lib/auth/authToken';
+import getSpotifyToken from '../../../lib/auth/token';
 import { generateSessionID, storeSession } from '../../../lib/auth/session';
 import { consumeOAuthState } from '../../../lib/auth/state';
 
@@ -9,14 +9,14 @@ export const GET = async (req: Request) => {
   const code = searchParams.get('code');
   const error = searchParams.get('error');
   const state = searchParams.get('state');
-  const redirectResponse = NextResponse.redirect(`${env.RENDER_BASE_URL}/dashboard`);
+  const redirectResponse = NextResponse.redirect(`${env.BASE_URL}/dashboard`);
 
   if (error || !code || !state) return redirectResponse;
 
   const isValidState = await consumeOAuthState(state);
   if (!isValidState) return redirectResponse;
 
-  const token = await getAuthToken(code);
+  const token = await getSpotifyToken(code);
   const sessionID: string = generateSessionID();
   await storeSession(sessionID, token);
 
