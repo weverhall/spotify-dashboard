@@ -14,7 +14,9 @@
 | 6.12.  | 2    | made sure to not return user's full auth token object to the client, added token ttl fetch from redis |
 |        | 5    | began to use the refresh token of my own credentials to fetch the actual global playlist contents |
 |        | 1    | centralized env variables and redis client creation to shared utils files |
-| 7.12.  | 3    | spent hours investigating why spotify api returns 404 for all algorithmic and curated playlists, and apparently about a year ago they removed that endpoint for new api users, so currently my plan is to pivot to using some other api for global trends data |
-| 10.12. | 5    | started implementing user-specific spotify api logic and stopped trying to fetch playlist data from a deprecated endpoint with a separate non-expiring refresh token |
+| 7.12.  | 3    | spent hours investigating why spotify api returns 404 for all algorithmic and curated playlists, and apparently about a year ago they removed that functionality of the playlist endpoint for new api users, so currently my plan is to pivot to using some other api for global trends data |
+| 10.12. | 5    | started implementing user-specific spotify api logic and stopped trying to fetch playlist data from a partly-deprecated endpoint with a separate non-expiring refresh token |
 | 12.12. | 4    | began using docker containers and localhost.run oauth callback tunneling for local dev, created a production dockerfile for render as well |
-| total  | 60   | |
+|        | 2    | optimized dockerfiles, switched to lazy-loading of redis client, created a redirect from callback route, changed a few secrets on render to apply at build time |
+| 13.12. | 2    | implemented oauth state handling for pre-auth csrf protection |
+| total  | 64   | |
