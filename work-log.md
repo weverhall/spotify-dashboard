@@ -20,4 +20,7 @@
 |        | 2    | optimized dockerfiles, switched to lazy-loading of redis client, created a redirect from callback route, changed a few secrets on render to apply at build time |
 | 13.12. | 2    | implemented oauth state handling for pre-auth csrf protection |
 |        | 4    | added global top tracks fetching from last.fm api, cleaned up schemas and project structure |
-| total  | 68   | |
+| 2026   |      | |
+| 14.2.  | 5    | tried figuring out how to best implement unit and integration tests for async server-side react as e.g. jest and vitest don't fully support this |
+| 15.2.  | 3    | set up playwright to get some basic e2e tests running and made a simple github actions workflow for them |
+| total  | 76   | |
