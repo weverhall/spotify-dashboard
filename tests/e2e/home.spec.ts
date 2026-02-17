@@ -15,5 +15,5 @@ test('has heading', async ({ page }) => {
 
   await page.goto('/');
 
-  await expect(page.getByRole('heading', { name: 'Global Top 50' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Global Trending Tracks' })).toBeVisible();
 });

@@ -5,6 +5,7 @@ import {
   LastfmGlobalTracks,
 } from '../types/schemas';
 import { env } from '../utils/config';
+import { getRedisClient } from '../utils/redis';
 
 export const getUserTracks = async (accessToken: string): Promise<SpotifyUserTracks> => {
   const params = new URLSearchParams({
@@ -37,5 +38,16 @@ export const getGlobalTracks = async (): Promise<LastfmGlobalTracks> => {
     throw new Error(`failed to fetch global tracks: ${res.status} ${text}`);
   }
 
-  return LastfmGlobalTracksSchema.parse((await res.json()).tracks.track);
+  return LastfmGlobalTracksSchema.parse(await res.json());
+};
+
+export const getCachedGlobalTracks = async (): Promise<LastfmGlobalTracks> => {
+  const redis = await getRedisClient();
+  const tracks = await redis.get('lastfm:globalTracks');
+
+  if (!tracks) {
+    throw new Error('found no tracks in redis');
+  }
+
+  return LastfmGlobalTracksSchema.parse(await JSON.parse(tracks));
 };

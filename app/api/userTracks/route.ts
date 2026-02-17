@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getUserTracks } from '../../lib/services/tracks';
+import { getUserTracks } from '../../lib/services/fetchTracks';
 import { getSessionID } from '../../lib/auth/cookie';
 import { getSession } from '../../lib/auth/session';
 import { SpotifyUserTracksSchema } from '../../lib/types/schemas';

@@ -1,0 +1,26 @@
+name: Daily Cron to Cache Trending Last.fm Tracks
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  cache-tracks:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
+      with:
+        node-version: 24
+        cache: 'npm'
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run script to invoke API and store fetched JSON in Redis
+      run: node app/lib/scripts/storeTracks.ts
+      env:
+        LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+        REDIS_URL: ${{ secrets.REDIS_URL }}
