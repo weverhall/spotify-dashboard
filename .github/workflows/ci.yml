@@ -32,7 +32,7 @@ jobs:
         LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
         REDIS_URL: ${{ secrets.REDIS_URL }}
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       if: ${{ !cancelled() }}
       with:
         name: playwright-report

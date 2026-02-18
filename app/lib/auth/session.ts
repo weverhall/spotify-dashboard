@@ -5,13 +5,13 @@ import { getRedisClient } from '../utils/redis';
 export const generateSessionID = (): string => crypto.randomBytes(32).toString('hex');
 
 export const storeSession = async (sessionID: string, token: SpotifyToken): Promise<void> => {
-  const client = await getRedisClient();
-  await client.set(`session:${sessionID}`, JSON.stringify(token), { EX: 3600 });
+  const redis = await getRedisClient();
+  await redis.set(`session:${sessionID}`, JSON.stringify(token), { EX: 3600 });
 };
 
 export const getSession = async (sessionID: string): Promise<SpotifyToken | null> => {
-  const client = await getRedisClient();
-  const data = await client.get(`session:${sessionID}`);
+  const redis = await getRedisClient();
+  const data = await redis.get(`session:${sessionID}`);
   if (!data) return null;
 
   try {
@@ -24,12 +24,12 @@ export const getSession = async (sessionID: string): Promise<SpotifyToken | null
 };
 
 export const deleteSession = async (sessionID: string): Promise<void> => {
-  const client = await getRedisClient();
-  await client.del(`session:${sessionID}`);
+  const redis = await getRedisClient();
+  await redis.del(`session:${sessionID}`);
 };
 
 export const getTimeToLive = async (sessionID: string): Promise<number> => {
-  const client = await getRedisClient();
-  const ttl = await client.ttl(`session:${sessionID}`);
+  const redis = await getRedisClient();
+  const ttl = await redis.ttl(`session:${sessionID}`);
   return ttl < 0 ? 0 : ttl;
 };

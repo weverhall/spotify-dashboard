@@ -10,13 +10,6 @@ const storeTracks = async () => {
       EX: 86400,
     });
 
-    //const keys = await redis.keys('*');
-    //console.log('redis keys:', keys);
-    //console.log('redis conn info:', {
-    //  url: redis.options.url,
-    //  socket: redis.options.socket,
-    //});
-
     process.exit(0);
   } catch (err) {
     console.error('failed to fetch or store tracks:', err);
