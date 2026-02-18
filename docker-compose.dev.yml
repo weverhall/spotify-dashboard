@@ -23,6 +23,3 @@ services:
 
 volumes:
   redis_data:
-
-# docker compose -f docker-compose.dev.yml up -d
-# ssh -R 80:localhost:3000 ssh.localhost.run

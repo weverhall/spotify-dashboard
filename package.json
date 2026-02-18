@@ -6,6 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "up": "docker compose -f docker-compose.dev.yml up -d",
+    "down": "docker compose -f docker-compose.dev.yml down",
+    "tunnel": "ssh -R 80:localhost:3000 ssh.localhost.run",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test:e2e": "playwright test"
@@ -26,6 +29,7 @@
     "@typescript-eslint/eslint-plugin": "^8.48.0",
     "eslint": "^9.39.1",
     "eslint-config-next": "^16.1.6",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

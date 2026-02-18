@@ -38,7 +38,7 @@ export const getGlobalTracks = async (): Promise<LastfmGlobalTracks> => {
     throw new Error(`failed to fetch global tracks: ${res.status} ${text}`);
   }
 
-  return LastfmGlobalTracksSchema.parse(await res.json());
+  return LastfmGlobalTracksSchema.parse((await res.json()).tracks.track);
 };
 
 export const getCachedGlobalTracks = async (): Promise<LastfmGlobalTracks> => {
@@ -46,8 +46,8 @@ export const getCachedGlobalTracks = async (): Promise<LastfmGlobalTracks> => {
   const tracks = await redis.get('lastfm:globalTracks');
 
   if (!tracks) {
-    throw new Error('found no tracks in redis');
+    return getGlobalTracks();
   }
 
-  return LastfmGlobalTracksSchema.parse(await JSON.parse(tracks));
+  return LastfmGlobalTracksSchema.parse(JSON.parse(tracks));
 };

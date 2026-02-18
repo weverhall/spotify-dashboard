@@ -20,7 +20,7 @@ jobs:
       run: npm ci
 
     - name: Run script to invoke API and store fetched JSON in Redis
-      run: node app/lib/scripts/storeTracks.ts
+      run: npx tsx app/lib/scripts/storeTracks.ts
       env:
         LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
         REDIS_URL: ${{ secrets.REDIS_URL }}
