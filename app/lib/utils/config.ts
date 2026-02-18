@@ -1,4 +1,7 @@
+import dotenv from 'dotenv';
 import { Environment } from '../types/schemas';
+
+dotenv.config({ path: '.env.local' });
 
 export const env: Environment = {
   BASE_URL: process.env.BASE_URL!,

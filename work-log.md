@@ -24,5 +24,5 @@
 | 14.2.  | 5    | tried figuring out how to best implement unit and integration tests for async server-side react as e.g. jest and vitest don't fully support this |
 | 15.2.  | 3    | set up playwright to get some basic e2e tests running and made a simple github actions workflow for them |
 | 17.2.  | 7    | created a daily cron job that triggers a script which retrieves trending tracks from last.fm's api and stores the json into redis  |
-| 18.2.  | 2    | fixed cron's script and track fetching methods |
-| total  | 85   | |
+| 18.2.  | 6    | fixed cron's script and track fetching methods, struggled to get redis connection and env values working with ci, render deployment, and local container setups |
+| total  | 89   | |
