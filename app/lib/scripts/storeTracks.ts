@@ -1,12 +1,12 @@
-import { getGlobalTracks } from '../services/fetchTracks';
+import { getTrendingTracks } from '../services/fetchTracks';
 import { getRedisClient } from '../utils/redis';
 
 const storeTracks = async () => {
   try {
     const redis = await getRedisClient();
-    const tracks = await getGlobalTracks();
+    const tracks = await getTrendingTracks();
 
-    await redis.set('lastfm:globalTracks', JSON.stringify(tracks), {
+    await redis.set('lastfm:trendingTracks', JSON.stringify(tracks), {
       EX: 86400,
     });
 

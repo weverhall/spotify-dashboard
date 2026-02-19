@@ -19,10 +19,11 @@
 | 12.12. | 4    | began using docker containers and localhost.run oauth callback tunneling for local dev, created a production dockerfile for render as well |
 |        | 2    | optimized dockerfiles, switched to lazy-loading of redis client, created a redirect from callback route, changed a few secrets on render to apply at build time |
 | 13.12. | 2    | implemented oauth state handling for pre-auth csrf protection |
-|        | 4    | added global top tracks fetching from last.fm api, cleaned up schemas and project structure |
+|        | 4    | added top trending tracks fetching from last.fm api, cleaned up schemas and project structure |
 | 2026   |      | |
 | 14.2.  | 5    | tried figuring out how to best implement unit and integration tests for async server-side react as e.g. jest and vitest don't fully support this |
 | 15.2.  | 3    | set up playwright to get some basic e2e tests running and made a simple github actions workflow for them |
 | 17.2.  | 7    | created a daily cron job that triggers a script which retrieves trending tracks from last.fm's api and stores the json into redis  |
 | 18.2.  | 6    | fixed cron's script and track fetching methods, struggled to get redis connection and env values working with ci, render deployment, and local container setups |
-| total  | 89   | |
+| 19.2.  | 5    | homepage trending tracks data is now inside a scrollable primereact table with search, also added all-time playcount and daily trending rank that persists when using search |
+| total  | 94   | |

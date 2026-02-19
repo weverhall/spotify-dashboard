@@ -1,13 +1,13 @@
-import GlobalTracks from './components/GlobalTracks';
-import { getCachedGlobalTracks } from './lib/services/fetchTracks';
+import TrendingTracks from './components/TrendingTracks';
+import { getCachedTrendingTracks } from './lib/services/fetchTracks';
 
 const Home = async () => {
-  const tracks = await getCachedGlobalTracks();
+  const tracks = await getCachedTrendingTracks();
 
   return (
     <main>
       <h1>Global Trending Tracks</h1>
-      <GlobalTracks tracks={tracks} />
+      <TrendingTracks tracks={tracks} />
     </main>
   );
 };

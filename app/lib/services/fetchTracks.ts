@@ -1,15 +1,15 @@
 import {
   SpotifyUserTracksSchema,
   SpotifyUserTracks,
-  LastfmGlobalTracksSchema,
-  LastfmGlobalTracks,
+  LastfmTracksSchema,
+  LastfmTracks,
 } from '../types/schemas';
 import { env } from '../utils/config';
 import { getRedisClient } from '../utils/redis';
 
 export const getUserTracks = async (accessToken: string): Promise<SpotifyUserTracks> => {
   const params = new URLSearchParams({
-    limit: '25',
+    limit: '20',
     offset: '0',
     time_range: 'medium_term',
   });
@@ -28,26 +28,26 @@ export const getUserTracks = async (accessToken: string): Promise<SpotifyUserTra
   return SpotifyUserTracksSchema.parse(await res.json());
 };
 
-export const getGlobalTracks = async (): Promise<LastfmGlobalTracks> => {
-  const limit = 25;
+export const getTrendingTracks = async (): Promise<LastfmTracks> => {
+  const limit = 50;
   const url = `http://ws.audioscrobbler.com/2.0/?method=chart.gettoptracks&api_key=${env.LASTFM_API_KEY}&format=json&limit=${limit}`;
 
   const res = await fetch(url);
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`failed to fetch global tracks: ${res.status} ${text}`);
+    throw new Error(`failed to fetch trending tracks: ${res.status} ${text}`);
   }
 
-  return LastfmGlobalTracksSchema.parse((await res.json()).tracks.track);
+  return LastfmTracksSchema.parse((await res.json()).tracks.track);
 };
 
-export const getCachedGlobalTracks = async (): Promise<LastfmGlobalTracks> => {
+export const getCachedTrendingTracks = async (): Promise<LastfmTracks> => {
   const redis = await getRedisClient();
-  const tracks = await redis.get('lastfm:globalTracks');
+  const tracks = await redis.get('lastfm:trendingTracks');
 
   if (!tracks) {
-    return getGlobalTracks();
+    return getTrendingTracks();
   }
 
-  return LastfmGlobalTracksSchema.parse(JSON.parse(tracks));
+  return LastfmTracksSchema.parse(JSON.parse(tracks));
 };

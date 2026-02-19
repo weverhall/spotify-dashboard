@@ -15,7 +15,13 @@ const LastfmTrackSchema = z.object({
   mbid: z.string().optional(),
 });
 
-export const LastfmGlobalTracksSchema = z.array(LastfmTrackSchema);
+export const LastfmRankedTracksSchema = z.array(
+  LastfmTrackSchema.extend({
+    rank: z.number(),
+  })
+);
+
+export const LastfmTracksSchema = z.array(LastfmTrackSchema);
 
 const SpotifyArtistSchema = z.object({
   id: z.string().nullable(),
@@ -71,7 +77,8 @@ export const EnvironmentSchema = z.object({
   LASTFM_API_KEY: z.string(),
 });
 
-export type LastfmGlobalTracks = z.infer<typeof LastfmGlobalTracksSchema>;
+export type LastfmTracks = z.infer<typeof LastfmTracksSchema>;
+export type LastfmRankedTracks = z.infer<typeof LastfmRankedTracksSchema>;
 export type SpotifyUserTracks = z.infer<typeof SpotifyUserTracksSchema>;
 export type SpotifyToken = z.infer<typeof SpotifyTokenSchema>;
 export type SpotifyProfile = z.infer<typeof SpotifyProfileSchema>;
