@@ -26,4 +26,5 @@
 | 17.2.  | 7    | created a daily cron job that triggers a script which retrieves trending tracks from last.fm's api and stores the json into redis  |
 | 18.2.  | 6    | fixed cron's script and track fetching methods, struggled to get redis connection and env values working with ci, render deployment, and local container setups |
 | 19.2.  | 5    | homepage trending tracks data is now inside a scrollable primereact table with search, also added all-time playcount and daily trending rank that persists when using search |
-| total  | 94   | |
+| 20.2.  | 4    | installed vitest and incorporated mock api unit tests into the ci pipeline |
+| total  | 98   | |

@@ -79,6 +79,7 @@ export const EnvironmentSchema = z.object({
 
 export type LastfmTracks = z.infer<typeof LastfmTracksSchema>;
 export type LastfmRankedTracks = z.infer<typeof LastfmRankedTracksSchema>;
+export type SpotifyTrack = z.infer<typeof SpotifyTrackSchema>;
 export type SpotifyUserTracks = z.infer<typeof SpotifyUserTracksSchema>;
 export type SpotifyToken = z.infer<typeof SpotifyTokenSchema>;
 export type SpotifyProfile = z.infer<typeof SpotifyProfileSchema>;

@@ -33,10 +33,15 @@ export default defineConfig([
       "@typescript-eslint/no-unsafe-assignment":"error",
       "@typescript-eslint/no-explicit-any":"error",
       "@typescript-eslint/no-unused-vars":["error",{argsIgnorePattern:"^_"}],
-      "@typescript-eslint/explicit-function-return-type":"off",
-      "@typescript-eslint/explicit-module-boundary-types":"off",
-      "@typescript-eslint/restrict-template-expressions":"off",
-      "@typescript-eslint/restrict-plus-operands":"off",
+      "@typescript-eslint/restrict-template-expressions":"error",
+      "@typescript-eslint/restrict-plus-operands":"error",
+    },
+  },
+  {
+    files: ["tests/unit/*.ts"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unsafe-assignment":"off",
     },
   },
 ]);

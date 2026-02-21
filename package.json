@@ -3,15 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --webpack",
     "build": "next build",
     "start": "next start",
-    "up": "docker compose -f docker-compose.dev.yml up -d",
-    "down": "docker compose -f docker-compose.dev.yml down",
+    "docker:up": "docker compose -f docker-compose.dev.yml up -d --build",
+    "docker:down": "docker compose -f docker-compose.dev.yml down -v",
     "tunnel": "ssh -R 80:localhost:3000 ssh.localhost.run",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test tests/e2e",
+    "test:unit": "vitest run tests/unit",
+    "test:intg": "vitest run tests/integration"
   },
   "dependencies": {
     "dotenv": "^17.3.1",
@@ -33,6 +35,7 @@
     "eslint": "^9.39.1",
     "eslint-config-next": "^16.1.6",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   }
 }

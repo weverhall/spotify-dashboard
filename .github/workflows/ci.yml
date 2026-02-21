@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+    types: [ opened, synchronize ]
 
 jobs:
   verify-build:
@@ -31,10 +32,12 @@ jobs:
       env:
         LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
         REDIS_URL: ${{ secrets.REDIS_URL }}
-
     - uses: actions/upload-artifact@v6
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
         path: playwright-report/
         retention-days: 7
+        
+    - name: Run unit tests
+      run: npm run test:unit
