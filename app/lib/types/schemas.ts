@@ -77,6 +77,8 @@ export const EnvironmentSchema = z.object({
   LASTFM_API_KEY: z.string(),
 });
 
+export type LastfmArtist = z.infer<typeof LastfmArtistSchema>;
+export type LastfmTrack = z.infer<typeof LastfmTrackSchema>;
 export type LastfmTracks = z.infer<typeof LastfmTracksSchema>;
 export type LastfmRankedTracks = z.infer<typeof LastfmRankedTracksSchema>;
 export type SpotifyTrack = z.infer<typeof SpotifyTrackSchema>;

@@ -27,4 +27,5 @@
 | 18.2.  | 6    | fixed cron's script and track fetching methods, struggled to get redis connection and env values working with ci, render deployment, and local container setups |
 | 19.2.  | 5    | homepage trending tracks data is now inside a scrollable primereact table with search, also added all-time playcount and daily trending rank that persists when using search |
 | 20.2.  | 4    | installed vitest and incorporated mock api unit tests into the ci pipeline |
-| total  | 98   | |
+| 23.2.  | 7    | used msw to write integration tests for the api calls, greatly improved unit testing and mocks as well  |
+| total  | 105   | |

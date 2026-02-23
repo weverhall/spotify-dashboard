@@ -23,6 +23,7 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
     "forceConsistentCasingInFileNames": true,
+    "types": ["vitest/globals", "node"],
     "plugins": [
       {
         "name": "next"

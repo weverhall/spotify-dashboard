@@ -27,6 +27,12 @@ jobs:
     - name: Check style
       run: npm run lint
 
+    - name: Run unit tests
+      run: npm run test:unit
+
+    - name: Run integration tests
+      run: npm run test:int
+
     - name: Run e2e tests
       run: npm run test:e2e
       env:
@@ -38,6 +44,3 @@ jobs:
         name: playwright-report
         path: playwright-report/
         retention-days: 7
-        
-    - name: Run unit tests
-      run: npm run test:unit
