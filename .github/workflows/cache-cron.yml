@@ -24,3 +24,9 @@ jobs:
       env:
         LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
         REDIS_URL: ${{ secrets.REDIS_URL }}
+
+    - name: Run script to revalidate homepage ISR cache
+      run: npx tsx app/lib/scripts/revalidateHome.ts
+      env:
+        REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET }}
+        BASE_URL: ${{ secrets.BASE_URL }}

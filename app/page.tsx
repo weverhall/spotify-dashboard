@@ -1,3 +1,5 @@
+export const revalidate = 86400;
+
 import TrendingTracks from './components/TrendingTracks';
 import { getCachedTrendingTracks } from './lib/services/fetchTracks';
 

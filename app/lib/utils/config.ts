@@ -10,4 +10,5 @@ export const env: Environment = {
   SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID!,
   SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET!,
   LASTFM_API_KEY: process.env.LASTFM_API_KEY!,
+  REVALIDATION_SECRET: process.env.REVALIDATION_SECRET!,
 };

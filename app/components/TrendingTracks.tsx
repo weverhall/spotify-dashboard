@@ -31,10 +31,8 @@ const TrendingTracks = ({ tracks }: { tracks: LastfmTracks }) => {
 
   const header = (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <div style={{ fontWeight: 'lighter', fontSize: '1.06rem' }}>
-        Rank determined by Last.fm&apos;s trend algorithm.
-        <br />
-        Updates daily at 0:00 UTC.
+      <div style={{ fontWeight: 'lighter', fontSize: '1.1rem' }}>
+        Rank determined by Last.fm&apos;s trend algorithm. Updates daily.
       </div>
 
       <IconField iconPosition="left">

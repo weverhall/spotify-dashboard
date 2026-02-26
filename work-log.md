@@ -28,4 +28,5 @@
 | 19.2.  | 5    | homepage trending tracks data is now inside a scrollable primereact table with search, also added all-time playcount and daily trending rank that persists when using search |
 | 20.2.  | 4    | installed vitest and incorporated mock api unit tests into the ci pipeline |
 | 23.2.  | 7    | used msw to write integration tests for the api calls, greatly improved unit testing and mocks as well  |
-| total  | 105   | |
+| 26.2.  | 4    | enabled isr for homepage and made a cron script to trigger revalidation after redis data update |
+| total  | 109   | |

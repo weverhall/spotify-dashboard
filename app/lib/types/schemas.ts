@@ -75,6 +75,7 @@ export const EnvironmentSchema = z.object({
   SPOTIFY_CLIENT_ID: z.string(),
   SPOTIFY_CLIENT_SECRET: z.string(),
   LASTFM_API_KEY: z.string(),
+  REVALIDATION_SECRET: z.string(),
 });
 
 export type LastfmArtist = z.infer<typeof LastfmArtistSchema>;
