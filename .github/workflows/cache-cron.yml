@@ -8,7 +8,7 @@ on:
 jobs:
   cold-start:
     timeout-minutes: 10
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
     - name: Wake up service and verify availability via cURL
       uses: jtalk/url-health-check-action@v4
@@ -20,7 +20,7 @@ jobs:
   cache-tracks:
     needs: cold-start
     timeout-minutes: 5
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v6
     - uses: actions/setup-node@v6
@@ -31,7 +31,7 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Run script to invoke API and store fetched JSON in Redis
+    - name: Run script to call API and store fetched JSON in Redis
       run: npx tsx app/lib/scripts/storeTracks.ts
       env:
         LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
