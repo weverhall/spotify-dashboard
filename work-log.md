@@ -29,5 +29,5 @@
 | 20.2.  | 4    | installed vitest and incorporated mock api unit tests into the ci pipeline |
 | 23.2.  | 7    | used msw to write integration tests for the api calls, greatly improved unit testing and mocks as well  |
 | 26.2.  | 4    | enabled isr for homepage and made a cron script to trigger revalidation after redis data update |
-| 2.3.   | 1    | combined cache cron job with a preceding cold start of the render site |
+| 2.3.   | 1    | combined cache cron job with a preceding cold start of the render site, changed ci to use specific ubuntu runner version, added dependabot |
 | total  | 110   | |
