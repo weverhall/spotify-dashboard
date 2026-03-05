@@ -13,13 +13,17 @@ const revalidateHome = async () => {
       throw new Error(`page cache revalidation failed with status ${revalidationRes.status}`);
     }
 
-    const warmRes = await fetch(env.BASE_URL, { method: 'GET' });
+    const triggerRes = await fetch(env.BASE_URL, { method: 'GET' });
+    if (!triggerRes.ok) {
+      throw new Error(`revalidation trigger failed with status ${triggerRes.status}`);
+    }
 
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+
+    const warmRes = await fetch(env.BASE_URL, { method: 'GET' });
     if (!warmRes.ok) {
       throw new Error(`cache warming failed with status ${warmRes.status}`);
     }
-
-    console.log('revalidation and cache warming succeeded');
 
     process.exit(0);
   } catch (err) {

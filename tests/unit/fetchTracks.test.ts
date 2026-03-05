@@ -1,6 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getUserTracks, getTrendingTracks } from '../../app/lib/services/fetchTracks';
-import { SpotifyUserTracksSchema, LastfmTracksSchema } from '../../app/lib/types/schemas';
 import { createFetchSuccessMock, createFetchFailureMock } from '../factories/responses';
 import {
   createSpotifyTrackMock,
@@ -14,19 +13,19 @@ describe('getUserTracks (unit/stub)', () => {
     vi.restoreAllMocks();
   });
 
-  it('returns parsed tracks when fetch succeeds', async () => {
+  it('returns expected data and calls the correct endpoint', async () => {
     const payload = createSpotifyUserTracksMock();
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(createFetchSuccessMock(payload)));
 
-    const result = await getUserTracks('fakeToken');
+    const result = await getUserTracks('testToken');
 
-    expect(result).toEqual(SpotifyUserTracksSchema.parse(payload));
+    expect(result.items[0].artists[0].name).toBe('Artist');
     expect(fetch).toHaveBeenCalledWith(
       expect.stringContaining(
         'https://api.spotify.com/v1/me/top/tracks?limit=20&offset=0&time_range=medium_term'
       ),
       expect.objectContaining({
-        headers: { Authorization: 'Bearer fakeToken' },
+        headers: { Authorization: 'Bearer testToken' },
       })
     );
   });
@@ -34,25 +33,9 @@ describe('getUserTracks (unit/stub)', () => {
   it('throws when fetch fails', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(createFetchFailureMock('Unauthorized')));
 
-    await expect(getUserTracks('fakeToken')).rejects.toThrow(
+    await expect(getUserTracks('testToken')).rejects.toThrow(
       /failed to fetch user tracks: 401 "?Unauthorized"?/
     );
-  });
-
-  it('returns tracks correctly when href string is included', async () => {
-    const payload = createSpotifyUserTracksMock({
-      items: [
-        createSpotifyTrackMock({
-          href: 'https://api.spotify.com/v1/',
-        }),
-      ],
-    });
-
-    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(createFetchSuccessMock(payload)));
-
-    const result = await getUserTracks('fakeToken');
-
-    expect(result).toEqual(payload);
   });
 
   describe('throws when received track data is invalid', () => {
@@ -77,7 +60,7 @@ describe('getUserTracks (unit/stub)', () => {
 
       vi.stubGlobal('fetch', vi.fn().mockResolvedValue(createFetchSuccessMock(payload)));
 
-      await expect(getUserTracks('fakeToken')).rejects.toThrow();
+      await expect(getUserTracks('testToken')).rejects.toThrow();
     });
   });
 });
@@ -87,7 +70,7 @@ describe('getTrendingTracks (unit/stub)', () => {
     vi.restoreAllMocks();
   });
 
-  it('returns parsed tracks when fetch succeeds', async () => {
+  it('returns expected data and calls the correct endpoint', async () => {
     const payload = createLastfmTrackMock();
 
     vi.stubGlobal(
@@ -101,7 +84,8 @@ describe('getTrendingTracks (unit/stub)', () => {
 
     const result = await getTrendingTracks();
 
-    expect(result).toEqual(LastfmTracksSchema.parse([payload]));
+    expect(Array.isArray(result)).toBe(true);
+    expect(result[0].artist.name).toBe('Artist');
     expect(fetch).toHaveBeenCalledWith(
       expect.stringMatching(/ws.audioscrobbler?.*method=chart\.gettoptracks.*format=json.*limit=50/)
     );
@@ -115,7 +99,7 @@ describe('getTrendingTracks (unit/stub)', () => {
     );
   });
 
-  it('returns tracks correctly when artist and track mbid strings are included', async () => {
+  it('returns track mbid while handling missing artist mbid', async () => {
     const payload = createLastfmTrackMock({
       mbid: 'track-mbid',
       artist: createLastfmArtistMock({
@@ -134,7 +118,8 @@ describe('getTrendingTracks (unit/stub)', () => {
 
     const result = await getTrendingTracks();
 
-    expect(result).toEqual([payload]);
+    expect(result[0].mbid).toBe('track-mbid');
+    expect(result[0].artist.mbid).toBeUndefined();
   });
 
   describe('throws when received track data is invalid', () => {

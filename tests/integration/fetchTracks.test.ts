@@ -3,7 +3,7 @@ import { getUserTracks, getTrendingTracks } from '../../app/lib/services/fetchTr
 
 describe('getUserTracks (integration/msw)', () => {
   it('returns mocked user track', async () => {
-    const data = await getUserTracks('fakeToken');
+    const data = await getUserTracks('testToken');
 
     expect(Array.isArray(data.items)).toBe(true);
     expect(data.items).toHaveLength(1);
