@@ -6,9 +6,8 @@ const storeTracks = async () => {
     const redis = await getRedisClient();
     const tracks = await getTrendingTracks();
 
-    await redis.set('lastfm:trendingTracks', JSON.stringify(tracks), {
-      EX: 86400,
-    });
+    await redis.set('lastfm:trendingTracks', JSON.stringify(tracks), { EX: 86400 });
+    await redis.quit();
 
     process.exit(0);
   } catch (err) {
