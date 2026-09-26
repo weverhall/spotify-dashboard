@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Spotify Dashboard',
+  title: 'Spotify User Stats',
 };
 
 const RootLayout = ({

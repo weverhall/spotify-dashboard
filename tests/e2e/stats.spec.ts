@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('has spotify login link', async ({ page }) => {
-  await page.goto('/dashboard');
+  await page.goto('/stats');
 
   await expect(page.getByRole('link', { name: 'spotify login' })).toHaveAttribute(
     'href',

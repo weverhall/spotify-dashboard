@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Session, SessionSchema } from '../lib/types/schemas';
 import UserTracks from '../components/UserTracks';
 
-const Dashboard = () => {
+const SpotifyStats = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -37,7 +37,7 @@ const Dashboard = () => {
 
   return (
     <main>
-      <h1>dashboard</h1>
+      <h1>spotify user stats</h1>
       <p>authenticated: {`${session.authenticated}`}</p>
       <p>expires in: {`${session.expires_in}`}</p>
       <UserTracks />
@@ -45,4 +45,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default SpotifyStats;
