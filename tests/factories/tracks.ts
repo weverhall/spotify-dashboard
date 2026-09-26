@@ -30,17 +30,11 @@ export const createLastfmArtistMock = (overrides: Partial<LastfmArtist> = {}): L
   ...overrides,
 });
 
-export const createLastfmTrackMock = (
-  overrides: Partial<LastfmTrack> = {},
-  i?: number
-): LastfmTrack => {
-  const index = i ?? 1;
-  return {
-    name: `Track ${index}`,
-    playcount: '100',
-    url: `https://www.last.fm/music/Artist/_/Track+${index}`,
-    artist: createLastfmArtistMock(),
-    listeners: '10',
-    ...overrides,
-  };
-};
+export const createLastfmTrackMock = (overrides: Partial<LastfmTrack> = {}): LastfmTrack => ({
+  name: 'Track 1',
+  playcount: '100',
+  url: 'https://www.last.fm/music/Artist/_/Track+1',
+  artist: createLastfmArtistMock(),
+  listeners: '10',
+  ...overrides,
+});

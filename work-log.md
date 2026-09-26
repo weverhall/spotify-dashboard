@@ -32,4 +32,5 @@
 | 2.3.   | 1    | combined cache cron job with a preceding cold start of the render site, changed ci to use specific ubuntu runner version, added dependabot |
 | 4.3.   | 2    | improved unit tests, added a second get request to the revalidation script to ensure warm cache |
 | 8.3.   | 2    | got isr finally fully working by initially polling homepage and ensuring redis disconnect after storing data |
-| total  | 114   | |
+| 26.9.  | 4    | improved tests by removing useless assertions, unstubbing properly, and using a real fixture for last.fm tracks data |
+| total  | 118  |  |

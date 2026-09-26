@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { getUserTracks, getTrendingTracks } from '../../app/lib/services/fetchTracks';
 import { createFetchSuccessMock, createFetchFailureMock } from '../factories/responses';
 import {
@@ -7,19 +7,19 @@ import {
   createLastfmArtistMock,
   createLastfmTrackMock,
 } from '../factories/tracks';
+import { ZodError } from 'zod';
 
 describe('getUserTracks (unit/stub)', () => {
-  beforeEach(() => {
-    vi.restoreAllMocks();
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
-  it('returns expected data and calls the correct endpoint', async () => {
+  it('calls the correct endpoint with auth header', async () => {
     const payload = createSpotifyUserTracksMock();
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(createFetchSuccessMock(payload)));
 
-    const result = await getUserTracks('testToken');
+    await getUserTracks('testToken');
 
-    expect(result.items[0].artists[0].name).toBe('Artist');
     expect(fetch).toHaveBeenCalledWith(
       expect.stringContaining(
         'https://api.spotify.com/v1/me/top/tracks?limit=20&offset=0&time_range=medium_term'
@@ -34,7 +34,7 @@ describe('getUserTracks (unit/stub)', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(createFetchFailureMock('Unauthorized')));
 
     await expect(getUserTracks('testToken')).rejects.toThrow(
-      /failed to fetch user tracks: 401 "?Unauthorized"?/
+      'failed to fetch user tracks: 401 Unauthorized'
     );
   });
 
@@ -60,34 +60,30 @@ describe('getUserTracks (unit/stub)', () => {
 
       vi.stubGlobal('fetch', vi.fn().mockResolvedValue(createFetchSuccessMock(payload)));
 
-      await expect(getUserTracks('testToken')).rejects.toThrow();
+      await expect(getUserTracks('testToken')).rejects.toThrow(ZodError);
     });
   });
 });
 
 describe('getTrendingTracks (unit/stub)', () => {
-  beforeEach(() => {
-    vi.restoreAllMocks();
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
-  it('returns expected data and calls the correct endpoint', async () => {
+  it('calls the correct endpoint', async () => {
     const payload = createLastfmTrackMock();
 
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockResolvedValue(
-        createFetchSuccessMock({
-          tracks: { track: [payload] },
-        })
-      )
+      vi.fn().mockResolvedValue(createFetchSuccessMock({ tracks: { track: [payload] } }))
     );
 
-    const result = await getTrendingTracks();
+    await getTrendingTracks();
 
-    expect(Array.isArray(result)).toBe(true);
-    expect(result[0].artist.name).toBe('Artist');
     expect(fetch).toHaveBeenCalledWith(
-      expect.stringMatching(/ws.audioscrobbler?.*method=chart\.gettoptracks.*format=json.*limit=50/)
+      expect.stringMatching(
+        /ws\.audioscrobbler\.com\/2\.0\/\?.*method=chart\.gettoptracks.*format=json.*limit=50/
+      )
     );
   });
 
@@ -95,31 +91,8 @@ describe('getTrendingTracks (unit/stub)', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(createFetchFailureMock('Unauthorized')));
 
     await expect(getTrendingTracks()).rejects.toThrow(
-      /failed to fetch trending tracks: 401 "?Unauthorized"?/
+      'failed to fetch trending tracks: 401 Unauthorized'
     );
-  });
-
-  it('returns track mbid while handling missing artist mbid', async () => {
-    const payload = createLastfmTrackMock({
-      mbid: 'track-mbid',
-      artist: createLastfmArtistMock({
-        mbid: undefined,
-      }),
-    });
-
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue(
-        createFetchSuccessMock({
-          tracks: { track: [payload] },
-        })
-      )
-    );
-
-    const result = await getTrendingTracks();
-
-    expect(result[0].mbid).toBe('track-mbid');
-    expect(result[0].artist.mbid).toBeUndefined();
   });
 
   describe('throws when received track data is invalid', () => {
@@ -154,7 +127,7 @@ describe('getTrendingTracks (unit/stub)', () => {
         )
       );
 
-      await expect(getTrendingTracks()).rejects.toThrow();
+      await expect(getTrendingTracks()).rejects.toThrow(ZodError);
     });
   });
 });

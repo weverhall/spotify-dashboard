@@ -6,8 +6,8 @@ export const createFetchSuccessMock = <T>(data: T, overrides?: ResponseInit): Re
     ...overrides,
   });
 
-export const createFetchFailureMock = <T>(data: T, overrides?: ResponseInit): Response =>
-  new Response(JSON.stringify(data), {
+export const createFetchFailureMock = (text: string, overrides?: ResponseInit): Response =>
+  new Response(text, {
     status: 401,
     statusText: 'Unauthorized',
     headers: { 'Content-Type': 'text/plain' },
