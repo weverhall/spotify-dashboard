@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "dotenv": "^17.4.2",
+    "mongoose": "^9.10.2",
     "next": "^16.2.7",
     "primeicons": "^7.0.0",
     "primereact": "^10.9.8",

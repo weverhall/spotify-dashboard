@@ -5,5 +5,8 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     setupFiles: ['./tests/integration/mocks/server.ts'],
+    env: {
+      BASE_URL: 'http://localhost:3000',
+    },
   },
 });

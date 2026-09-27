@@ -1,14 +1,15 @@
 import dotenv from 'dotenv';
-import { Environment } from '../types/schemas';
+import { EnvironmentSchema } from '../types/schemas';
 
 dotenv.config({ path: '.env.local' });
 
-export const env: Environment = {
+export const env = EnvironmentSchema.parse({
   BASE_URL: process.env.BASE_URL!,
   REDIRECT_URI: process.env.REDIRECT_URI!,
   REDIS_URL: process.env.REDIS_URL!,
+  MONGODB_URI: process.env.MONGODB_URI!,
   SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID!,
   SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET!,
   LASTFM_API_KEY: process.env.LASTFM_API_KEY!,
   REVALIDATION_SECRET: process.env.REVALIDATION_SECRET!,
-};
+});

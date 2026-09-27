@@ -72,6 +72,7 @@ export const EnvironmentSchema = z.object({
   BASE_URL: z.url(),
   REDIRECT_URI: z.url(),
   REDIS_URL: z.url(),
+  MONGODB_URI: z.url(),
   SPOTIFY_CLIENT_ID: z.string(),
   SPOTIFY_CLIENT_SECRET: z.string(),
   LASTFM_API_KEY: z.string(),
