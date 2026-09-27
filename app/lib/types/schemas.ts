@@ -68,6 +68,11 @@ export const SessionSchema = z.object({
   expires_in: z.number().optional(),
 });
 
+export const SnapshotSchema = z.object({
+  date: z.iso.date(),
+  tracks: LastfmTracksSchema,
+});
+
 export const EnvironmentSchema = z.object({
   BASE_URL: z.url(),
   REDIRECT_URI: z.url(),
@@ -89,4 +94,5 @@ export type SpotifyToken = z.infer<typeof SpotifyTokenSchema>;
 export type SpotifyProfile = z.infer<typeof SpotifyProfileSchema>;
 export type Cookie = z.infer<typeof CookieSchema>;
 export type Session = z.infer<typeof SessionSchema>;
+export type Snapshot = z.infer<typeof SnapshotSchema>;
 export type Environment = z.infer<typeof EnvironmentSchema>;

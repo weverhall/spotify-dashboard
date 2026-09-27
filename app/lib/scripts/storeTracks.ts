@@ -1,5 +1,7 @@
+import { disconnectMongo } from '../utils/mongo';
 import { getTrendingTracks } from '../services/fetchTracks';
 import { getRedisClient } from '../utils/redis';
+import { saveSnapshot } from '../services/chartHistory';
 
 const storeTracks = async () => {
   try {
@@ -7,7 +9,10 @@ const storeTracks = async () => {
     const tracks = await getTrendingTracks();
 
     await redis.set('lastfm:trendingTracks', JSON.stringify(tracks), { EX: 86400 });
+    await saveSnapshot(tracks);
+
     await redis.quit();
+    await disconnectMongo();
 
     process.exit(0);
   } catch (err) {

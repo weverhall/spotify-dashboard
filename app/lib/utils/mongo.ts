@@ -16,3 +16,8 @@ export const connectMongo = (): Promise<typeof mongoose> => {
   }
   return globalThis.mongooseConnection;
 };
+
+export const disconnectMongo = async (): Promise<void> => {
+  await mongoose.disconnect();
+  globalThis.mongooseConnection = undefined;
+};
