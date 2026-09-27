@@ -8,7 +8,7 @@ declare global {
 export const connectMongo = (): Promise<typeof mongoose> => {
   if (!globalThis.mongooseConnection) {
     globalThis.mongooseConnection = mongoose
-      .connect(env.MONGODB_URI, { family: 4 })
+      .connect(env.MONGODB_URI, { family: 4, dbName: 'spotify-fm' })
       .catch((err) => {
         globalThis.mongooseConnection = undefined;
         throw new Error('could not connect to mongodb', { cause: err });
