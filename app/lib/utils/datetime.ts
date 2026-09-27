@@ -1,1 +1,1 @@
-export const getTodayDateUTC = (): string => new Date().toISOString().slice(0, 10);
+export const getTodayDate = (): string => new Date().toISOString().slice(0, 10);

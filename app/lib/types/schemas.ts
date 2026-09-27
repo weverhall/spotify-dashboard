@@ -73,6 +73,8 @@ export const SnapshotSchema = z.object({
   tracks: LastfmTracksSchema,
 });
 
+export const ChartMovementSchema = z.union([z.number(), z.literal('new')]);
+
 export const EnvironmentSchema = z.object({
   BASE_URL: z.url(),
   REDIRECT_URI: z.url(),
@@ -95,4 +97,5 @@ export type SpotifyProfile = z.infer<typeof SpotifyProfileSchema>;
 export type Cookie = z.infer<typeof CookieSchema>;
 export type Session = z.infer<typeof SessionSchema>;
 export type Snapshot = z.infer<typeof SnapshotSchema>;
+export type ChartMovement = z.infer<typeof ChartMovementSchema>;
 export type Environment = z.infer<typeof EnvironmentSchema>;

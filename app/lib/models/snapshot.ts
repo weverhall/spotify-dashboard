@@ -8,8 +8,10 @@ const snapshotDbSchema = new mongoose.Schema<Snapshot>(
     date: { type: String, required: true, unique: true },
     tracks: { type: mongoose.Schema.Types.Mixed, required: true },
   },
-  { versionKey: false }
+  { versionKey: false, timestamps: { createdAt: true, updatedAt: false } }
 );
+
+snapshotDbSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 * 60 * 24 * 365 });
 
 export const SnapshotModel =
   (mongoose.models.Snapshot as mongoose.Model<Snapshot> | undefined) ??

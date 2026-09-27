@@ -6,7 +6,7 @@ import { Column } from 'primereact/column';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
-import type { LastfmTracks, LastfmRankedTracks } from '../lib/types/schemas';
+import type { LastfmTracks, LastfmRankedTracks, ChartMovement } from '../lib/types/schemas';
 import 'primereact/resources/themes/lara-light-purple/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
@@ -21,7 +21,19 @@ const formatPlaycount = (playcount?: string): number => {
   return Math.round(count / 1000);
 };
 
-const TrendingTracks = ({ tracks }: { tracks: LastfmTracks }) => {
+const formatChartMovement = (movement: ChartMovement) => {
+  if (movement === 'new') return <span style={{ color: 'var(--primary-color)' }}>New!</span>;
+  if (movement > 0) return <span style={{ color: 'var(--green-500)' }}>▲{movement}</span>;
+  if (movement < 0) return <span style={{ color: 'var(--red-500)' }}>▼{-movement}</span>;
+  return '–';
+};
+
+type TrendingTracksProps = {
+  tracks: LastfmTracks;
+  movement?: ChartMovement[];
+};
+
+const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
   const [filter, setFilter] = useState<string>('');
 
   const rankedTracks: LastfmRankedTracks = tracks.map((track, i) => ({
@@ -61,6 +73,12 @@ const TrendingTracks = ({ tracks }: { tracks: LastfmTracks }) => {
       showGridlines
     >
       <Column field="rank" header="#" style={{ width: '40px' }} />
+
+      <Column
+        header="Trend"
+        style={{ width: '70px' }}
+        body={(rowData) => (movement ? formatChartMovement(movement[rowData.rank - 1]) : null)}
+      />
 
       <Column
         header="Artist"
