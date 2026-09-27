@@ -11,9 +11,18 @@ jobs:
   verify-build:
     timeout-minutes: 15
     runs-on: ubuntu-24.04
+    env:
+      BASE_URL: ${{ vars.CI_BASE_URL }}
+      REDIRECT_URI: ${{ vars.CI_REDIRECT_URI }}
+      REDIS_URL: ${{ secrets.REDIS_URL }}
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      SPOTIFY_CLIENT_ID: ${{ secrets.SPOTIFY_CLIENT_ID }}
+      SPOTIFY_CLIENT_SECRET: ${{ secrets.SPOTIFY_CLIENT_SECRET }}
+      LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
+      REVALIDATION_SECRET: ${{ secrets.REVALIDATION_SECRET }}
     steps:
-    - uses: actions/checkout@v6
-    - uses: actions/setup-node@v6
+    - uses: actions/checkout@v7
+    - uses: actions/setup-node@v7
       with:
         node-version: 24
         cache: 'npm'
@@ -35,10 +44,8 @@ jobs:
 
     - name: Run e2e tests
       run: npm run test:e2e
-      env:
-        LASTFM_API_KEY: ${{ secrets.LASTFM_API_KEY }}
-        REDIS_URL: ${{ secrets.REDIS_URL }}
-    - uses: actions/upload-artifact@v6
+
+    - uses: actions/upload-artifact@v7
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
