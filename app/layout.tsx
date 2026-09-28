@@ -22,7 +22,9 @@ const RootLayout = ({
 }>) => {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>{children}</body>
+      <body className={`${geistSans.variable} ${geistMono.variable}`} style={{ margin: 0 }}>
+        {children}
+      </body>
     </html>
   );
 };

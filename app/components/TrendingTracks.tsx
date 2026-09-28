@@ -66,19 +66,24 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
 
   const header = (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <div style={{ fontWeight: 'lighter', fontSize: '1.1rem' }}>
-        Rank determined by Last.fm&apos;s trend algorithm. Updates daily.
+      <div>
+        <h1 style={{ margin: '0 0 0.25rem 0', fontSize: '1.75rem' }}>Global Trending Tracks</h1>
+        <div style={{ fontWeight: 'lighter', fontSize: '1.1rem' }}>
+          Daily rank determined by Last.fm&apos;s trend algorithm.
+        </div>
       </div>
 
-      <IconField iconPosition="left">
-        <InputIcon className="pi pi-search" style={{ fontSize: '1.1rem' }} />
-        <InputText
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-          placeholder="Search..."
-          style={{ width: '275px' }}
-        />
-      </IconField>
+      <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <IconField iconPosition="left">
+          <InputIcon className="pi pi-search" style={{ fontSize: '1.1rem' }} />
+          <InputText
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            placeholder="Search..."
+            style={{ width: '300px' }}
+          />
+        </IconField>
+      </div>
     </div>
   );
 
@@ -92,18 +97,17 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
       dataKey={(track) => track.mbid ?? track.name}
       size="small"
       scrollable
-      scrollHeight="408px"
+      scrollHeight="max(300px, calc(100vh - 344px))"
       showGridlines
       removableSort
     >
-      <Column field="rank" header="#" sortable style={{ width: '45px' }} />
+      <Column field="rank" header="#" sortable />
 
       <Column
         header="Trend"
         sortable
         sortField="trend"
         sortFunction={(e) => sortByNumber(e, (track) => getMovementSortValue(track.rank))}
-        style={{ width: '70px' }}
         body={(rowData) => (movement ? formatChartMovement(movement[rowData.rank - 1]) : null)}
       />
 
