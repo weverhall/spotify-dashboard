@@ -1,0 +1,4 @@
+.main :global(.p-sortable-column-icon) {
+  width: 0.85rem;
+  height: 0.85rem;
+}

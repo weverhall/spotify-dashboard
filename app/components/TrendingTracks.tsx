@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
+import { Column, type ColumnSortEvent } from 'primereact/column';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
@@ -22,10 +22,27 @@ const formatPlaycount = (playcount?: string): number => {
 };
 
 const formatChartMovement = (movement: ChartMovement) => {
-  if (movement === 'new') return <span style={{ color: 'var(--primary-color)' }}>New!</span>;
-  if (movement > 0) return <span style={{ color: 'var(--green-500)' }}>▲{movement}</span>;
-  if (movement < 0) return <span style={{ color: 'var(--red-500)' }}>▼{-movement}</span>;
+  if (movement === 'new') return <span style={{ color: 'purple' }}>New!</span>;
+  if (movement > 0)
+    return (
+      <span style={{ color: 'green' }}>
+        <i className="pi pi-arrow-up" style={{ fontSize: '0.85rem' }} /> {movement}
+      </span>
+    );
+  if (movement < 0)
+    return (
+      <span style={{ color: 'var(--red-600)' }}>
+        <i className="pi pi-arrow-down" style={{ fontSize: '0.85rem' }} /> {-movement}
+      </span>
+    );
   return '–';
+};
+
+type RankedTrack = LastfmRankedTracks[number];
+
+const sortByNumber = (e: ColumnSortEvent, getValue: (track: RankedTrack) => number) => {
+  const order = e.order === -1 ? -1 : 1;
+  return [...(e.data as LastfmRankedTracks)].sort((a, b) => (getValue(a) - getValue(b)) * order);
 };
 
 type TrendingTracksProps = {
@@ -35,6 +52,12 @@ type TrendingTracksProps = {
 
 const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
   const [filter, setFilter] = useState<string>('');
+
+  const getMovementSortValue = (rank: number): number => {
+    if (!movement) return 0;
+    const value = movement[rank - 1];
+    return typeof value === 'number' ? value : 100;
+  };
 
   const rankedTracks: LastfmRankedTracks = tracks.map((track, i) => ({
     ...track,
@@ -71,17 +94,23 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
       scrollable
       scrollHeight="408px"
       showGridlines
+      removableSort
     >
-      <Column field="rank" header="#" style={{ width: '40px' }} />
+      <Column field="rank" header="#" sortable style={{ width: '45px' }} />
 
       <Column
         header="Trend"
+        sortable
+        sortField="trend"
+        sortFunction={(e) => sortByNumber(e, (track) => getMovementSortValue(track.rank))}
         style={{ width: '70px' }}
         body={(rowData) => (movement ? formatChartMovement(movement[rowData.rank - 1]) : null)}
       />
 
       <Column
+        field="artist.name"
         header="Artist"
+        sortable
         body={(rowData) => {
           const artistLink = getArtistLink(rowData.artist.name);
           return (
@@ -93,7 +122,9 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
       />
 
       <Column
+        field="name"
         header="Track"
+        sortable
         body={(rowData) => (
           <a href={String(rowData.url ?? '#')} target="_blank" rel="noopener noreferrer">
             {rowData.name}
@@ -102,7 +133,10 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
       />
 
       <Column
+        field="playcount"
         header="All-time playcount (in thousands)"
+        sortable
+        sortFunction={(e) => sortByNumber(e, (track) => Number(track.playcount))}
         body={(rowData) => formatPlaycount(rowData.playcount)}
       />
     </DataTable>
