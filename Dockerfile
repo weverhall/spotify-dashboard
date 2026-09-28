@@ -30,6 +30,7 @@ COPY --chown=nextjs:nodejs package*.json ./
 RUN npm ci --omit=dev
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
 
 USER nextjs
 
