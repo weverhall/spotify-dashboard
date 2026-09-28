@@ -1,45 +1,21 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { Session, SessionSchema } from '../lib/types/schemas';
+import { redirect } from 'next/navigation';
+import { getSessionID } from '../lib/auth/cookie';
+import { getSession, getTimeToLive } from '../lib/auth/session';
 import UserTracks from '../components/UserTracks';
 
-const SpotifyStats = () => {
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+const SpotifyStats = async () => {
+  const sessionID = await getSessionID();
+  if (!sessionID) redirect('/');
 
-  useEffect(() => {
-    const fetchSession = async () => {
-      try {
-        const res = await fetch('/api/auth/session');
-        const data = SessionSchema.parse(await res.json());
-        setSession(data.authenticated ? data : null);
-      } catch {
-        setSession(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSession();
-  }, []);
+  const session = await getSession(sessionID);
+  if (!session) redirect('/');
 
-  if (loading) {
-    return <main>loading session...</main>;
-  }
-
-  if (!session) {
-    return (
-      <main>
-        <a href="/api/auth/login">spotify login</a>
-      </main>
-    );
-  }
+  const expiresIn = await getTimeToLive(sessionID);
 
   return (
     <main>
-      <h1>spotify user stats</h1>
-      <p>authenticated: {`${session.authenticated}`}</p>
-      <p>expires in: {`${session.expires_in}`}</p>
+      <h1>Spotify User Stats</h1>
+      <p>Session expires in: {expiresIn}</p>
       <UserTracks />
     </main>
   );
