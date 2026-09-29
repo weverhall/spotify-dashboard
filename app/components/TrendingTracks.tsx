@@ -67,7 +67,7 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
 
   const header = (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 'calc(1rem - 1px)' }}>
         <Image src="/last-fm-round-color-icon.svg" alt="" width={44} height={44} />
         <div>
           <h1 style={{ margin: '0 0 0.1rem 0', fontSize: '1.7rem' }}>Global Trending Tracks</h1>

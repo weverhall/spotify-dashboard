@@ -1,8 +1,8 @@
-name: Daily Cron to Cache Trending Last.fm Tracks
+name: Scheduled Trending Tracks Refresh
 
 on:
   schedule:
-    - cron: '0 3 * * *'
+    - cron: '45 3,15 * * *'
   workflow_dispatch:
 
 jobs:
@@ -40,8 +40,8 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Run script to call API and store fetched JSON in Redis
+    - name: Call Last.fm API and store trending tracks in MongoDB
       run: npx tsx app/lib/scripts/storeTracks.ts
 
-    - name: Run script to revalidate homepage ISR cache
+    - name: Revalidate homepage ISR cache
       run: npx tsx app/lib/scripts/revalidateHome.ts

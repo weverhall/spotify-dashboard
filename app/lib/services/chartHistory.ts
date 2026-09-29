@@ -14,9 +14,17 @@ export const saveSnapshot = async (tracks: LastfmTracks, date = getTodayDate()):
   await SnapshotModel.updateOne({ date }, { tracks }, { upsert: true });
 };
 
-const getPreviousSnapshot = async (date: string): Promise<Snapshot | null> => {
+export const getLatestSnapshot = async (): Promise<Snapshot | null> => {
   await connectMongo();
-  const rawSnapshot = await SnapshotModel.findOne({ date: { $lt: date } }).sort({ date: -1 });
+  const rawSnapshot = await SnapshotModel.findOne().sort({ date: -1 });
+  if (!rawSnapshot) return null;
+
+  return SnapshotSchema.parse(rawSnapshot);
+};
+
+const getPreviousSnapshot = async (): Promise<Snapshot | null> => {
+  await connectMongo();
+  const rawSnapshot = await SnapshotModel.findOne().sort({ date: -1 }).skip(1);
   if (!rawSnapshot) return null;
 
   return SnapshotSchema.parse(rawSnapshot);
@@ -41,7 +49,7 @@ export const getChartMovement = async (
   tracks: LastfmTracks
 ): Promise<ChartMovement[] | undefined> => {
   try {
-    const previous = await getPreviousSnapshot(getTodayDate());
+    const previous = await getPreviousSnapshot();
     if (!previous) return undefined;
 
     return calculateChartMovement(tracks, previous.tracks);

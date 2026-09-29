@@ -5,7 +5,7 @@ import {
   LastfmTracks,
 } from '../types/schemas';
 import { env } from '../utils/config';
-import { getRedisClient } from '../utils/redis';
+import { getLatestSnapshot } from './chartHistory';
 
 export const getUserTracks = async (accessToken: string): Promise<SpotifyUserTracks> => {
   const spotifyParams = new URLSearchParams({
@@ -47,12 +47,12 @@ export const getTrendingTracks = async (): Promise<LastfmTracks> => {
 };
 
 export const getCachedTrendingTracks = async (): Promise<LastfmTracks> => {
-  const redis = await getRedisClient();
-  const tracks = await redis.get('lastfm:trendingTracks');
-
-  if (!tracks) {
-    return getTrendingTracks();
+  try {
+    const latest = await getLatestSnapshot();
+    if (latest) return latest.tracks;
+  } catch (err) {
+    console.error('failed to read latest snapshot, fetching live instead:', err);
   }
 
-  return LastfmTracksSchema.parse(JSON.parse(tracks));
+  return getTrendingTracks();
 };
