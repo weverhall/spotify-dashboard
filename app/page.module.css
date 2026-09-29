@@ -2,7 +2,7 @@
 
 .page {
   min-height: 100vh;
-  background: #f3faf5;
+  background: #f8fcf9;
   color: #1f1d2b;
   font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
@@ -28,7 +28,7 @@
 
 .spotifyCard:hover {
   background: #1c1c1c;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 5px 22px rgba(0, 0, 0, 0.09);
 }
 
 .spotifyText {
@@ -45,6 +45,7 @@
 }
 
 .spotifyArrow {
+  margin-right: 0.65rem;
   color: #1db954;
   font-size: 1.2rem;
   transition: transform 0.15s;
@@ -85,10 +86,24 @@
 }
 
 .main :global(.p-datatable-wrapper) {
-  height: max(300px, calc(100vh - 344px));
+  height: max(300px, calc(100vh - 345px));
 }
 
 .main :global(.p-sortable-column-icon) {
   width: 0.85rem;
   height: 0.85rem;
+}
+
+.main :global(.p-datatable-header) {
+  padding: 1rem 1.5rem 1rem 21.5px;
+  background: #fff;
+}
+
+.main :global(.p-datatable a:visited) {
+  color: #7a6aa8;
+}
+
+.main :global(.p-inputtext:enabled:focus) {
+  border-color: #a99bd6;
+  box-shadow: 0 0 0 0.15rem #ebe6f7;
 }

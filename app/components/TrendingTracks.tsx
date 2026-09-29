@@ -7,6 +7,7 @@ import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import type { LastfmTracks, LastfmRankedTracks, ChartMovement } from '../lib/types/schemas';
+import Image from 'next/image';
 import 'primereact/resources/themes/lara-light-purple/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
@@ -66,10 +67,13 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
 
   const header = (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <div>
-        <h1 style={{ margin: '0 0 0.25rem 0', fontSize: '1.75rem' }}>Global Trending Tracks</h1>
-        <div style={{ fontWeight: 'lighter', fontSize: '1.1rem' }}>
-          Daily rank determined by Last.fm&apos;s trend algorithm.
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        <Image src="/last-fm-round-color-icon.svg" alt="" width={44} height={44} />
+        <div>
+          <h1 style={{ margin: '0 0 0.1rem 0', fontSize: '1.7rem' }}>Global Trending Tracks</h1>
+          <div style={{ fontWeight: 'lighter', fontSize: '1.05rem', marginLeft: '2px' }}>
+            Daily rank determined by Last.fm&apos;s trend algorithm.
+          </div>
         </div>
       </div>
 
@@ -97,7 +101,7 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
       dataKey={(track) => track.mbid ?? track.name}
       size="small"
       scrollable
-      scrollHeight="max(300px, calc(100vh - 344px))"
+      scrollHeight="max(300px, calc(100vh - 345px))"
       showGridlines
       removableSort
     >
@@ -108,6 +112,7 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
         sortable
         sortField="trend"
         sortFunction={(e) => sortByNumber(e, (track) => getMovementSortValue(track.rank))}
+        style={{ width: '9%' }}
         body={(rowData) => (movement ? formatChartMovement(movement[rowData.rank - 1]) : null)}
       />
 
@@ -115,6 +120,7 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
         field="artist.name"
         header="Artist"
         sortable
+        style={{ width: '21%' }}
         body={(rowData) => {
           const artistLink = getArtistLink(rowData.artist.name);
           return (
@@ -129,6 +135,7 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
         field="name"
         header="Track"
         sortable
+        style={{ width: '33%' }}
         body={(rowData) => (
           <a href={String(rowData.url ?? '#')} target="_blank" rel="noopener noreferrer">
             {rowData.name}
