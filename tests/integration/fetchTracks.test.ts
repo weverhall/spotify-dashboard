@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { getUserTracks, getTrendingTracks } from '../../app/lib/services/fetchTracks';
-import lastfmTopTracks from '../fixtures/gettoptracks.json';
+import lastfmTopTracks from '../fixtures/trendingTracks.json';
 
 describe('getUserTracks (integration/msw)', () => {
   it('returns mocked user track', async () => {

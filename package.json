@@ -8,7 +8,7 @@
     "start": "next start",
     "docker:up": "docker compose -f docker-compose.dev.yml up -d --build",
     "docker:down": "docker compose -f docker-compose.dev.yml down -v",
-    "tunnel": "ssh -R 80:localhost:3000 ssh.localhost.run",
+    "tunnel": "ssh -R 80:localhost:3000 nokey@localhost.run",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test:unit": "vitest run tests/unit",

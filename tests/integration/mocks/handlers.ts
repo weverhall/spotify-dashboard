@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import lastfmTopTracks from '../../fixtures/gettoptracks.json';
+import lastfmTopTracks from '../../fixtures/trendingTracks.json';
 import { createSpotifyUserTracksMock } from '../../factories/tracks';
 
 export const handlers = [
