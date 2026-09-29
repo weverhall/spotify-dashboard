@@ -9,9 +9,17 @@ import {
   SnapshotSchema,
 } from '../types/schemas';
 
-export const saveSnapshot = async (tracks: LastfmTracks, date = getTodayDate()): Promise<void> => {
+export const saveSnapshot = async (
+  tracks: LastfmTracks,
+  date = getTodayDate()
+): Promise<boolean> => {
   await connectMongo();
-  await SnapshotModel.updateOne({ date }, { tracks }, { upsert: true });
+  const result = await SnapshotModel.updateOne(
+    { date },
+    { $setOnInsert: { tracks } },
+    { upsert: true }
+  );
+  return result.upsertedCount > 0;
 };
 
 export const getLatestSnapshot = async (): Promise<Snapshot | null> => {
@@ -29,6 +37,9 @@ const getPreviousSnapshot = async (): Promise<Snapshot | null> => {
 
   return SnapshotSchema.parse(rawSnapshot);
 };
+
+export const isSameChart = (a: LastfmTracks, b: LastfmTracks): boolean =>
+  a.length === b.length && a.every((track, i) => trackKey(track) === trackKey(b[i]));
 
 const trackKey = (track: LastfmTrack): string =>
   `${track.artist.name} - ${track.name}`.toLowerCase();

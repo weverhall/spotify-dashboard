@@ -1,17 +1,22 @@
 import { getTrendingTracks } from '../services/fetchTracks';
-import { saveSnapshot } from '../services/chartHistory';
+import { getLatestSnapshot, saveSnapshot, isSameChart } from '../services/chartHistory';
+import { getTodayDate } from '../utils/datetime';
 import { disconnectMongo } from '../utils/mongo';
 
 const storeTracks = async () => {
   try {
-    const tracks = await getTrendingTracks();
-    await saveSnapshot(tracks);
-    await disconnectMongo();
+    const latest = await getLatestSnapshot();
 
-    process.exit(0);
+    if (latest?.date !== getTodayDate()) {
+      const tracks = await getTrendingTracks();
+      if (!latest || !isSameChart(latest.tracks, tracks)) await saveSnapshot(tracks);
+    }
   } catch (err) {
     console.error('failed to fetch or store tracks:', err);
     process.exit(1);
+  } finally {
+    await disconnectMongo();
+    process.exit(0);
   }
 };
 
