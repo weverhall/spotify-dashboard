@@ -1,10 +1,29 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { SpotifyUserTracks, SpotifyUserTracksSchema } from '../lib/types/schemas';
+import Image from 'next/image';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { SpotifyUserTracksSchema, type SpotifyTrack, type Ranked } from '../lib/types/schemas';
+import styles from '../stats/stats.module.css';
+import 'primereact/resources/themes/lara-light-purple/theme.css';
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
+
+const header = (
+  <div style={{ display: 'flex', alignItems: 'center', gap: 'calc(1rem - 1px)' }}>
+    <Image src="/Primary_Logo_Green_RGB.svg" alt="" width={44} height={44} />
+    <div>
+      <h1 style={{ margin: '0 0 0.1rem 0', fontSize: '1.7rem' }}>Your Top Tracks</h1>
+      <div style={{ fontWeight: 'lighter', fontSize: '1.05rem', marginLeft: '2px' }}>
+        Last 6 months on Spotify.
+      </div>
+    </div>
+  </div>
+);
 
 const UserTracks = () => {
-  const [tracks, setTracks] = useState<SpotifyUserTracks | null>(null);
+  const [tracks, setTracks] = useState<Ranked<SpotifyTrack>[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>();
 
@@ -12,10 +31,11 @@ const UserTracks = () => {
     const fetchTracks = async () => {
       try {
         const res = await fetch('/api/userTracks');
+        if (!res.ok) throw new Error(`status ${res.status}`);
         const data = SpotifyUserTracksSchema.parse(await res.json());
-        setTracks(data);
+        setTracks(data.items.map((track, i) => ({ ...track, rank: i + 1 })));
       } catch {
-        setError('could not fetch user tracks');
+        setError('failed to fetch user top tracks');
       } finally {
         setLoading(false);
       }
@@ -23,31 +43,26 @@ const UserTracks = () => {
     fetchTracks();
   }, []);
 
-  if (loading) {
-    return <p>loading tracks...</p>;
-  }
-
-  if (error || !tracks) {
-    return <p>{error}</p>;
-  }
+  if (error) return <p>{error}</p>;
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>artist</th>
-          <th>track</th>
-        </tr>
-      </thead>
-      <tbody>
-        {tracks.items.map((track) => (
-          <tr key={track.id}>
-            <td>{track.artists.map((a) => a.name).join(', ')}</td>
-            <td>{track.name}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <DataTable
+      header={header}
+      value={tracks}
+      loading={loading}
+      dataKey="rank"
+      rowClassName={() => styles.row}
+      size="normal"
+      showGridlines
+      removableSort
+    >
+      <Column field="rank" header="#" sortable style={{ width: '4rem' }} />
+      <Column field="name" header="Track" sortable style={{ width: '40%' }} />
+      <Column
+        header="Artist"
+        body={(track: Ranked<SpotifyTrack>) => track.artists.map((a) => a.name).join(', ')}
+      />
+    </DataTable>
   );
 };
 

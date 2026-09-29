@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { getSessionID } from '../lib/auth/cookie';
 import { getSession, getTimeToLive } from '../lib/auth/session';
 import UserTracks from '../components/UserTracks';
+import styles from './stats.module.css';
 
 const SpotifyStats = async () => {
   const sessionID = await getSessionID();
@@ -13,11 +14,12 @@ const SpotifyStats = async () => {
   const expiresIn = await getTimeToLive(sessionID);
 
   return (
-    <main>
-      <h1>Spotify User Stats</h1>
-      <p>Session expires in: {expiresIn}</p>
-      <UserTracks />
-    </main>
+    <div className={styles.page}>
+      <main className={styles.main}>
+        <p>Session expires in: {expiresIn}</p>
+        <UserTracks />
+      </main>
+    </div>
   );
 };
 

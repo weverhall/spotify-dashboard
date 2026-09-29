@@ -15,12 +15,6 @@ const LastfmTrackSchema = z.object({
   mbid: z.string().optional(),
 });
 
-export const LastfmRankedTracksSchema = z.array(
-  LastfmTrackSchema.extend({
-    rank: z.number(),
-  })
-);
-
 export const LastfmTracksSchema = z.array(LastfmTrackSchema);
 
 const SpotifyArtistSchema = z.object({
@@ -89,7 +83,6 @@ export const EnvironmentSchema = z.object({
 export type LastfmArtist = z.infer<typeof LastfmArtistSchema>;
 export type LastfmTrack = z.infer<typeof LastfmTrackSchema>;
 export type LastfmTracks = z.infer<typeof LastfmTracksSchema>;
-export type LastfmRankedTracks = z.infer<typeof LastfmRankedTracksSchema>;
 export type SpotifyTrack = z.infer<typeof SpotifyTrackSchema>;
 export type SpotifyUserTracks = z.infer<typeof SpotifyUserTracksSchema>;
 export type SpotifyToken = z.infer<typeof SpotifyTokenSchema>;
@@ -99,3 +92,4 @@ export type Session = z.infer<typeof SessionSchema>;
 export type Snapshot = z.infer<typeof SnapshotSchema>;
 export type ChartMovement = z.infer<typeof ChartMovementSchema>;
 export type Environment = z.infer<typeof EnvironmentSchema>;
+export type Ranked<T> = T & { rank: number };

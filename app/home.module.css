@@ -57,14 +57,9 @@
 
 .main :global(.p-datatable) {
   border-radius: 12px;
-  overflow: hidden;
+  overflow: clip;
   border: 1px solid #dfe7e1;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
-}
-
-.main :global(.p-datatable-header) {
-  padding: 1rem;
-  background: #fff;
 }
 
 .main :global(.p-datatable .p-datatable-thead > tr > th) {
@@ -83,10 +78,6 @@
 
 .main :global(.p-datatable a:hover) {
   text-decoration: underline;
-}
-
-.main :global(.p-datatable-wrapper) {
-  height: max(300px, calc(100vh - 345px));
 }
 
 .main :global(.p-sortable-column-icon) {

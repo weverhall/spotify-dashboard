@@ -7,7 +7,7 @@ import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import { MultiSelect } from 'primereact/multiselect';
-import type { LastfmTracks, LastfmRankedTracks, ChartMovement } from '../lib/types/schemas';
+import type { LastfmTrack, LastfmTracks, ChartMovement, Ranked } from '../lib/types/schemas';
 import Image from 'next/image';
 import 'primereact/resources/themes/lara-light-purple/theme.css';
 import 'primereact/resources/primereact.min.css';
@@ -40,11 +40,11 @@ const formatChartMovement = (movement: ChartMovement) => {
   return '–';
 };
 
-type RankedTrack = LastfmRankedTracks[number];
+type RankedTrack = Ranked<LastfmTrack>;
 
 const sortByNumber = (e: ColumnSortEvent, getValue: (track: RankedTrack) => number) => {
   const order = e.order === -1 ? -1 : 1;
-  return [...(e.data as LastfmRankedTracks)].sort((a, b) => (getValue(a) - getValue(b)) * order);
+  return [...(e.data as RankedTrack[])].sort((a, b) => (getValue(a) - getValue(b)) * order);
 };
 
 type TrendingTracksProps = {
@@ -62,7 +62,7 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
     return typeof value === 'number' ? value : 100;
   };
 
-  const rankedTracks: LastfmRankedTracks = tracks.map((track, i) => ({
+  const rankedTracks: RankedTrack[] = tracks.map((track, i) => ({
     ...track,
     rank: i + 1,
   }));
@@ -129,8 +129,6 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
       value={visibleTracks}
       dataKey={(track) => track.mbid ?? track.name}
       size="small"
-      scrollable
-      scrollHeight="max(300px, calc(100vh - 345px))"
       showGridlines
       removableSort
     >
