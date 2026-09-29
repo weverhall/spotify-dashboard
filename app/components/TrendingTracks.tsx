@@ -6,6 +6,7 @@ import { Column, type ColumnSortEvent } from 'primereact/column';
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
+import { MultiSelect } from 'primereact/multiselect';
 import type { LastfmTracks, LastfmRankedTracks, ChartMovement } from '../lib/types/schemas';
 import Image from 'next/image';
 import 'primereact/resources/themes/lara-light-purple/theme.css';
@@ -53,6 +54,7 @@ type TrendingTracksProps = {
 
 const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
   const [filter, setFilter] = useState<string>('');
+  const [selectedArtists, setSelectedArtists] = useState<string[]>([]);
 
   const getMovementSortValue = (rank: number): number => {
     if (!movement) return 0;
@@ -64,6 +66,19 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
     ...track,
     rank: i + 1,
   }));
+
+  const artistNames = [...new Set(tracks.map((track) => track.artist.name))];
+  const countTracks = (name: string) => tracks.filter((track) => track.artist.name === name).length;
+
+  const artistOptions = artistNames
+    .map((name) => ({ name, count: countTracks(name) }))
+    .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
+    .map(({ name, count }) => ({ label: `${name} (${count})`, value: name }));
+
+  const visibleTracks =
+    selectedArtists.length === 0
+      ? rankedTracks
+      : rankedTracks.filter((track) => selectedArtists.includes(track.artist.name));
 
   const header = (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -77,14 +92,28 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '0.5rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <MultiSelect
+          id="artist-filter"
+          inputId="artist-filter-input"
+          value={selectedArtists}
+          onChange={(e) => setSelectedArtists(e.value as string[])}
+          options={artistOptions}
+          placeholder="All artists"
+          filter
+          showSelectAll={false}
+          maxSelectedLabels={1}
+          selectedItemsLabel="{0} artists"
+          style={{ width: '220px' }}
+        />
+
         <IconField iconPosition="left">
           <InputIcon className="pi pi-search" style={{ fontSize: '1.1rem' }} />
           <InputText
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             placeholder="Search..."
-            style={{ width: '300px' }}
+            style={{ width: '280px' }}
           />
         </IconField>
       </div>
@@ -97,7 +126,7 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
       loading={!tracks}
       globalFilter={filter}
       globalFilterFields={['artist.name', 'name']}
-      value={rankedTracks}
+      value={visibleTracks}
       dataKey={(track) => track.mbid ?? track.name}
       size="small"
       scrollable
@@ -112,7 +141,7 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
         sortable
         sortField="trend"
         sortFunction={(e) => sortByNumber(e, (track) => getMovementSortValue(track.rank))}
-        style={{ width: '9%' }}
+        style={{ width: '8%' }}
         body={(rowData) => (movement ? formatChartMovement(movement[rowData.rank - 1]) : null)}
       />
 
@@ -120,7 +149,7 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
         field="artist.name"
         header="Artist"
         sortable
-        style={{ width: '21%' }}
+        style={{ width: '22%' }}
         body={(rowData) => {
           const artistLink = getArtistLink(rowData.artist.name);
           return (
