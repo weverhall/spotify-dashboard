@@ -6,9 +6,6 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { SpotifyUserTracksSchema, type SpotifyTrack, type Ranked } from '../lib/types/schemas';
 import styles from '../stats/stats.module.css';
-import 'primereact/resources/themes/lara-light-purple/theme.css';
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
 
 const header = (
   <div style={{ display: 'flex', alignItems: 'center', gap: 'calc(1rem - 1px)' }}>

@@ -9,9 +9,6 @@ import { InputText } from 'primereact/inputtext';
 import { MultiSelect } from 'primereact/multiselect';
 import type { LastfmTrack, LastfmTracks, ChartMovement, Ranked } from '../lib/types/schemas';
 import Image from 'next/image';
-import 'primereact/resources/themes/lara-light-purple/theme.css';
-import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
 
 const getArtistLink = (artistName: string): string => {
   const formatted = encodeURIComponent(artistName.replace(/ /g, '+'));

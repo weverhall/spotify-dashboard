@@ -1,8 +1,11 @@
+import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { getSessionID } from '../lib/auth/cookie';
 import { getSession, getTimeToLive } from '../lib/auth/session';
 import UserTracks from '../components/UserTracks';
 import styles from './stats.module.css';
+
+export const metadata: Metadata = { title: 'User Stats' };
 
 const SpotifyStats = async () => {
   const sessionID = await getSessionID();
