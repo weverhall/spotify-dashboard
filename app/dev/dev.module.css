@@ -30,11 +30,15 @@
   list-style: none;
 }
 
+.main {
+  padding: 2rem 1.5rem;
+}
+
 .header {
   display: flex;
   align-items: center;
   gap: calc(1rem - 1px);
-  padding: 1rem 1.5rem 1rem 21.5px;
+  padding: 1rem 2rem 1rem 21.5px;
   border-bottom: 1px solid #dfe7e1;
 }
 
@@ -44,7 +48,7 @@
 }
 
 .subheading {
-  margin-left: 5px;
+  margin-left: 4px;
   font-size: 1.3rem;
   font-weight: 150;
 }
@@ -214,4 +218,30 @@
   .artists {
     white-space: normal;
   }
+
+  .header {
+    padding-right: 1rem;
+  }
+}
+
+.homeLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 3rem;
+  height: 3rem;
+  margin-left: auto;
+  border-radius: 50%;
+  color: #1f1d2b;
+  transition: background 0.15s;
+}
+
+.homeLink:hover {
+  background: #f3f0fa;
+}
+
+.homeLink:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 0.15rem #ebe6f7;
 }

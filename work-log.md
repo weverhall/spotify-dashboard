@@ -36,4 +36,5 @@
 | 27.9.  | 8    | connected to mongodb atlas via mongoose and implemented a preliminary version of trending tracks rank history, also updated env validation and ci |
 | 28.9.  | 4    | redesigned homepage UI: new spotify login button, data table now with sorting and improved looks, elements resized and aligned, e2e tests updated accordingly |
 | 29.9.  | 10   | created the first draft of a proper user stats page, added logo and filtering to trending tracks table, started storing trending tracks to mongodb only, improved cron and storing logic |
-| total  | 140  |  |
+| 30.9.  | 5    | polished user stats page UI and UX, also modified env in render, github, and api dashboard in order to change app url to reflect new spotify.fm name |
+| total  | 145  |  |

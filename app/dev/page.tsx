@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import UserDevPage from '../components/UserDevPage';
 import { SpotifyUserTracksSchema } from '../lib/types/schemas';
 import fixture from '../../tests/fixtures/userTracks.json';
+import styles from './dev.module.css';
 
 export const metadata: Metadata = {
   title: 'Dev',
@@ -14,7 +15,11 @@ const DevPage = () => {
     rank: i + 1,
   }));
 
-  return <UserDevPage tracks={tracks} />;
+  return (
+    <main className={styles.main}>
+      <UserDevPage tracks={tracks} />
+    </main>
+  );
 };
 
 export default DevPage;

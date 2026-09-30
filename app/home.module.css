@@ -20,8 +20,8 @@
 }
 
 .spotifyCard:hover {
-  background: #1c1c1c;
-  box-shadow: 0 5px 22px rgba(0, 0, 0, 0.09);
+  background: #1a1a1a;
+  box-shadow: 0 5px 22px rgba(0, 0, 0, 0.1);
 }
 
 .spotifyText {
@@ -38,14 +38,10 @@
 }
 
 .spotifyArrow {
-  margin-right: 0.65rem;
-  color: #1db954;
-  font-size: 1.2rem;
+  margin-right: 0.7rem;
+  color: #f8fcf9;
+  font-size: 1.3rem;
   transition: transform 0.15s;
-}
-
-.spotifyCard:hover .spotifyArrow {
-  transform: translateX(2px);
 }
 
 .main :global(.p-datatable) {

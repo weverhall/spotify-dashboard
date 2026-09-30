@@ -32,3 +32,13 @@ export const PauseIcon = (props: IconProps) => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 5.25v13.5m-7.5-13.5v13.5" />
   </Icon>
 );
+
+export const ArrowUturnLeftIcon = (props: IconProps) => (
+  <Icon {...props}>
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3"
+    />
+  </Icon>
+);

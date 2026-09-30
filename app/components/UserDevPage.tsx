@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { DataScroller } from 'primereact/datascroller';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Button } from 'primereact/button';
 import type { SpotifyTrack, Ranked } from '../lib/types/schemas';
 import { useSpotifyEmbed } from '../lib/hooks/useSpotifyEmbed';
-import { PlayIcon, PauseIcon } from './ui/icons';
+import { PlayIcon, PauseIcon, ArrowUturnLeftIcon } from './ui/icons';
 import styles from '../dev/dev.module.css';
 
 type UserDevPageProps = {
@@ -28,6 +29,9 @@ const header = (
       <h1 className={styles.heading}>Your Top Tracks</h1>
       <div className={styles.subheading}>Last 6 months on Spotify.</div>
     </div>
+    <Link href="/" className={styles.homeLink} aria-label="Back to trending tracks">
+      <ArrowUturnLeftIcon size={24} />
+    </Link>
   </div>
 );
 
