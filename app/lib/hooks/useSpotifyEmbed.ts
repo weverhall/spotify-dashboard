@@ -26,6 +26,8 @@ declare global {
   }
 }
 
+const PENDING_TIMEOUT_MS = 3000;
+
 let apiPromise: Promise<IFrameAPI> | null = null;
 
 const loadIframeApi = (): Promise<IFrameAPI> => {
@@ -44,8 +46,23 @@ const trackUri = (id: string) => `spotify:track:${id}`;
 export const useSpotifyEmbed = (initialTrackId: string | null) => {
   const hostRef = useRef<HTMLDivElement>(null);
   const controllerRef = useRef<EmbedController | null>(null);
+  const pendingRef = useRef(false);
+  const pendingTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [isPaused, setIsPaused] = useState(true);
+
+  const clearPending = () => {
+    pendingRef.current = false;
+    clearTimeout(pendingTimerRef.current);
+  };
+
+  const startPending = () => {
+    clearPending();
+    pendingRef.current = true;
+    pendingTimerRef.current = setTimeout(() => {
+      pendingRef.current = false;
+    }, PENDING_TIMEOUT_MS);
+  };
 
   useEffect(() => {
     if (!initialTrackId) return;
@@ -63,13 +80,19 @@ export const useSpotifyEmbed = (initialTrackId: string | null) => {
         (controller) => {
           if (cancelled) return controller.destroy();
           controllerRef.current = controller;
-          controller.addListener('playback_update', (e) => setIsPaused(e.data.isPaused));
+
+          controller.addListener('playback_update', ({ data }) => {
+            if (pendingRef.current && (data.isPaused || data.isBuffering)) return;
+            if (!data.isPaused) clearPending();
+            setIsPaused(data.isPaused);
+          });
         }
       );
     });
 
     return () => {
       cancelled = true;
+      clearPending();
       controllerRef.current?.destroy();
       controllerRef.current = null;
     };
@@ -80,13 +103,17 @@ export const useSpotifyEmbed = (initialTrackId: string | null) => {
     if (!controller) return;
 
     if (trackId === currentId) {
+      clearPending();
+      setIsPaused((paused) => !paused);
       controller.togglePlay();
       return;
     }
 
+    startPending();
+    setCurrentId(trackId);
+    setIsPaused(false);
     controller.loadUri(trackUri(trackId));
     controller.play();
-    setCurrentId(trackId);
   };
 
   const isPlaying = (trackId: string) => trackId === currentId && !isPaused;
