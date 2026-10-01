@@ -141,7 +141,7 @@
   width: 50%;
   box-sizing: border-box;
   padding: 1.25rem 0 0.6rem;
-  transform: translateX(-7.5px);
+  transform: translateX(-8px);
 }
 
 .termSelect:global(.p-selectbutton) {

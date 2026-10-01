@@ -16,11 +16,17 @@ type UserDevPageProps = {
   tracks: Ranked<SpotifyTrack>[];
 };
 
-const TERM_OPTIONS: { label: string; value: SpotifyTerm }[] = [
+type TermOption = { label: string; value: SpotifyTerm };
+
+const TERM_OPTIONS: TermOption[] = [
   { label: '4 weeks', value: 'short_term' },
   { label: '6 months', value: 'medium_term' },
   { label: '1 year', value: 'long_term' },
 ];
+
+const termItemTemplate = (option: TermOption) => (
+  <span className={styles.termLabel}>{option.label}</span>
+);
 
 const header = (
   <div className={styles.header}>
@@ -121,7 +127,7 @@ const UserDevPage = ({ tracks }: UserDevPageProps) => {
     <>
       <div className={styles.view}>
         {header}
-        <TabView renderActiveOnly={false}>
+        <TabView>
           <TabPanel header="Top Tracks">
             <div className={styles.toolbar}>
               <SelectButton
@@ -129,11 +135,7 @@ const UserDevPage = ({ tracks }: UserDevPageProps) => {
                 value={term}
                 onChange={(e) => e.value && setTerm(e.value)}
                 options={TERM_OPTIONS}
-                itemTemplate={(option: (typeof TERM_OPTIONS)[number]) => (
-                  <span className={styles.termLabel} data-label={option.label}>
-                    {option.label}
-                  </span>
-                )}
+                itemTemplate={termItemTemplate}
                 allowEmpty={false}
                 aria-label="Time period"
               />
