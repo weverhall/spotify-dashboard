@@ -9,7 +9,7 @@ export const GET = async (req: Request) => {
   const code = searchParams.get('code');
   const error = searchParams.get('error');
   const state = searchParams.get('state');
-  const redirectResponse = NextResponse.redirect(`${env.BASE_URL}/stats`);
+  const redirectResponse = NextResponse.redirect(`${env.BASE_URL}/my-tracks`);
 
   if (error || !code || !state) return redirectResponse;
 

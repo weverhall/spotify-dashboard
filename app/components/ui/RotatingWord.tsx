@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import styles from '../../styles/dev.module.css';
+import styles from '../../styles/my-tracks.module.css';
 
 type RotatingWordProps = {
   words: readonly string[];

@@ -6,7 +6,7 @@ import { getChartMovement } from './lib/services/chartHistory';
 import styles from './styles/home.module.css';
 import Image from 'next/image';
 
-const Home = async () => {
+const HomePage = async () => {
   const tracks = await getCachedTrendingTracks();
   const movement = await getChartMovement(tracks);
 
@@ -28,4 +28,4 @@ const Home = async () => {
   );
 };
 
-export default Home;
+export default HomePage;
