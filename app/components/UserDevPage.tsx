@@ -9,7 +9,8 @@ import { SelectButton } from 'primereact/selectbutton';
 import { Button } from 'primereact/button';
 import type { SpotifyTrack, SpotifyProfile, Ranked, SpotifyTerm } from '../lib/types/schemas';
 import { useSpotifyEmbed } from '../lib/hooks/useSpotifyEmbed';
-import { PlayIcon, PauseIcon, ArrowUturnLeftIcon } from './ui/icons';
+import { PlayIcon, PauseIcon, ArrowUturnLeftIcon } from './ui/Icons';
+import RotatingWord from './ui/RotatingWord';
 import styles from '../styles/dev.module.css';
 
 type UserDevPageProps = {
@@ -24,6 +25,16 @@ const TERM_OPTIONS: TermOption[] = [
   { label: '6 months', value: 'medium_term' },
   { label: '1 year', value: 'long_term' },
 ];
+
+const ROTATING_WORDS = [
+  'listening',
+  'jamming',
+  'grooving',
+  'vibing',
+  'dancing',
+  'chilling',
+  'studying',
+] as const;
 
 const termItemTemplate = (option: TermOption) => (
   <span className={styles.termLabel}>{option.label}</span>
@@ -44,7 +55,7 @@ const Header = ({ name }: { name?: string | null }) => (
     <div className={styles.headerText}>
       <h1 className={styles.heading}>{greeting(name)}</h1>
       <div className={styles.subheading}>
-        Here&apos;s what you&apos;ve been listening to lately.
+        Here&apos;s what you&apos;ve been <RotatingWord words={ROTATING_WORDS} /> to lately.
       </div>
     </div>
     <Link
