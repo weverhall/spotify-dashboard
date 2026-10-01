@@ -1,17 +1,21 @@
 import {
   SpotifyUserTracksSchema,
   SpotifyUserTracks,
+  SpotifyTerm,
   LastfmTracksSchema,
   LastfmTracks,
 } from '../types/schemas';
 import { env } from '../utils/config';
 import { getLatestSnapshot } from './chartHistory';
 
-export const getUserTracks = async (accessToken: string): Promise<SpotifyUserTracks> => {
+export const getUserTracks = async (
+  accessToken: string,
+  term: SpotifyTerm = 'medium_term'
+): Promise<SpotifyUserTracks> => {
   const spotifyParams = new URLSearchParams({
     limit: '20',
     offset: '0',
-    time_range: 'medium_term',
+    time_range: term,
   });
 
   const res = await fetch(`https://api.spotify.com/v1/me/top/tracks?${spotifyParams.toString()}`, {

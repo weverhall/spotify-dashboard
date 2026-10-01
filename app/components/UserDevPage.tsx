@@ -5,8 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { DataScroller } from 'primereact/datascroller';
 import { TabView, TabPanel } from 'primereact/tabview';
+import { SelectButton } from 'primereact/selectbutton';
 import { Button } from 'primereact/button';
-import type { SpotifyTrack, Ranked } from '../lib/types/schemas';
+import type { SpotifyTrack, Ranked, SpotifyTerm } from '../lib/types/schemas';
 import { useSpotifyEmbed } from '../lib/hooks/useSpotifyEmbed';
 import { PlayIcon, PauseIcon, ArrowUturnLeftIcon } from './ui/icons';
 import styles from '../styles/dev.module.css';
@@ -14,6 +15,12 @@ import styles from '../styles/dev.module.css';
 type UserDevPageProps = {
   tracks: Ranked<SpotifyTrack>[];
 };
+
+const TERM_OPTIONS: { label: string; value: SpotifyTerm }[] = [
+  { label: '4 weeks', value: 'short_term' },
+  { label: '6 months', value: 'medium_term' },
+  { label: '1 year', value: 'long_term' },
+];
 
 const header = (
   <div className={styles.header}>
@@ -27,15 +34,21 @@ const header = (
     </a>
     <div>
       <h1 className={styles.heading}>Your Top Tracks</h1>
-      <div className={styles.subheading}>Last 6 months on Spotify.</div>
+      <div className={styles.subheading}>Your most played tracks on Spotify.</div>
     </div>
-    <Link href="/" className={styles.homeLink} aria-label="Back to trending tracks">
+    <Link
+      href="/"
+      className={styles.homeLink}
+      aria-label="Back to trending tracks"
+      title="Back to trending tracks"
+    >
       <ArrowUturnLeftIcon size={24} />
     </Link>
   </div>
 );
 
 const UserDevPage = ({ tracks }: UserDevPageProps) => {
+  const [term, setTerm] = useState<SpotifyTerm>('medium_term');
   const [favorites, setFavorites] = useState<SpotifyTrack[]>([]);
   const { hostRef, play, isPlaying } = useSpotifyEmbed(tracks[0]?.id ?? null);
 
@@ -110,6 +123,21 @@ const UserDevPage = ({ tracks }: UserDevPageProps) => {
         {header}
         <TabView renderActiveOnly={false}>
           <TabPanel header="Top Tracks">
+            <div className={styles.toolbar}>
+              <SelectButton
+                className={styles.termSelect}
+                value={term}
+                onChange={(e) => e.value && setTerm(e.value)}
+                options={TERM_OPTIONS}
+                itemTemplate={(option: (typeof TERM_OPTIONS)[number]) => (
+                  <span className={styles.termLabel} data-label={option.label}>
+                    {option.label}
+                  </span>
+                )}
+                allowEmpty={false}
+                aria-label="Time period"
+              />
+            </div>
             <DataScroller
               value={tracks}
               itemTemplate={(track: Ranked<SpotifyTrack>) => row(track, track.rank)}
@@ -120,7 +148,7 @@ const UserDevPage = ({ tracks }: UserDevPageProps) => {
           <TabPanel
             header={
               <>
-                All-time Favorites
+                Favorites
                 {favorites.length > 0 && <span className={styles.count}>{favorites.length}</span>}
               </>
             }

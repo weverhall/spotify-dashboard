@@ -53,6 +53,8 @@ export const SpotifyProfileSchema = z.object({
   email: z.string().optional(),
 });
 
+export const SpotifyTermSchema = z.enum(['short_term', 'medium_term', 'long_term']);
+
 export const CookieSchema = z.object({
   session_id: z.string().length(64),
 });
@@ -87,6 +89,7 @@ export type SpotifyTrack = z.infer<typeof SpotifyTrackSchema>;
 export type SpotifyUserTracks = z.infer<typeof SpotifyUserTracksSchema>;
 export type SpotifyToken = z.infer<typeof SpotifyTokenSchema>;
 export type SpotifyProfile = z.infer<typeof SpotifyProfileSchema>;
+export type SpotifyTerm = z.infer<typeof SpotifyTermSchema>;
 export type Cookie = z.infer<typeof CookieSchema>;
 export type Session = z.infer<typeof SessionSchema>;
 export type Snapshot = z.infer<typeof SnapshotSchema>;

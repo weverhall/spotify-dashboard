@@ -19,16 +19,31 @@
 }
 
 .view :global(.p-tabview .p-tabview-nav) {
-  gap: 1.75rem;
-  padding: 0 2rem 0 21.5px;
+  gap: 0;
+  padding: 0;
   background: none;
   border: none;
   border-bottom: 1px solid #dfe7e1;
 }
 
+.view :global(.p-tabview .p-tabview-nav li) {
+  flex: 1;
+}
+
+.view :global(.p-tabview .p-tabview-title) {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
 .view :global(.p-tabview .p-tabview-nav li .p-tabview-nav-link) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  height: 3rem;
   margin: 0 0 -1px;
-  padding: 0.85rem 0;
+  padding: 0;
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
@@ -118,6 +133,57 @@
   color: var(--primary-color);
   font-size: 0.8rem;
   font-weight: 600;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  box-sizing: border-box;
+  padding: 1.25rem 0 0.6rem;
+  transform: translateX(-7.5px);
+}
+
+.termSelect:global(.p-selectbutton) {
+  display: inline-flex;
+  gap: 0.4rem;
+}
+
+.termSelect:global(.p-selectbutton) :global(.p-button) {
+  margin: 0;
+  padding: 0.4rem 0.95rem;
+  border: 1px solid #dfe7e1;
+  border-radius: 999px;
+  background: #fff;
+  color: #6b6b6b;
+  font-family: inherit;
+  font-size: 0.9rem;
+  box-shadow: none;
+  transition: background 0.1s;
+}
+
+.termSelect:global(.p-selectbutton) :global(.p-button:not(.p-disabled):not(.p-highlight):hover) {
+  background: #f9fbfa;
+  border-color: #dfe7e1;
+  color: #6b6b6b;
+}
+
+.termSelect:global(.p-selectbutton) :global(.p-button.p-highlight) {
+  background: #fff;
+  border-color: var(--primary-color);
+  color: #1f1d2b;
+}
+
+.termSelect:global(.p-selectbutton) :global(.p-button:focus-visible) {
+  box-shadow: 0 0 0 0.15rem #ebe6f7;
+}
+
+.termLabel {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 500;
+  letter-spacing: normal;
 }
 
 .row {
@@ -274,8 +340,10 @@
     padding-right: 1rem;
   }
 
-  .view :global(.p-tabview .p-tabview-nav) {
-    padding-right: 1rem;
+  .toolbar {
+    width: 100%;
+    padding: 1rem 1rem 0.6rem;
+    transform: none;
   }
 
   .row {
