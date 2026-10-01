@@ -7,13 +7,14 @@ import { DataScroller } from 'primereact/datascroller';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { SelectButton } from 'primereact/selectbutton';
 import { Button } from 'primereact/button';
-import type { SpotifyTrack, Ranked, SpotifyTerm } from '../lib/types/schemas';
+import type { SpotifyTrack, SpotifyProfile, Ranked, SpotifyTerm } from '../lib/types/schemas';
 import { useSpotifyEmbed } from '../lib/hooks/useSpotifyEmbed';
 import { PlayIcon, PauseIcon, ArrowUturnLeftIcon } from './ui/icons';
 import styles from '../styles/dev.module.css';
 
 type UserDevPageProps = {
   tracks: Ranked<SpotifyTrack>[];
+  profile: SpotifyProfile;
 };
 
 type TermOption = { label: string; value: SpotifyTerm };
@@ -28,7 +29,9 @@ const termItemTemplate = (option: TermOption) => (
   <span className={styles.termLabel}>{option.label}</span>
 );
 
-const header = (
+const greeting = (name?: string | null) => (name ? `Hi, ${name}!` : 'Hi there!');
+
+const Header = ({ name }: { name?: string | null }) => (
   <div className={styles.header}>
     <a
       href="https://open.spotify.com"
@@ -38,9 +41,11 @@ const header = (
     >
       <Image src="/Primary_Logo_Black_RGB.svg" alt="" width={54} height={54} />
     </a>
-    <div>
-      <h1 className={styles.heading}>Your Top Tracks</h1>
-      <div className={styles.subheading}>Your most played tracks on Spotify.</div>
+    <div className={styles.headerText}>
+      <h1 className={styles.heading}>{greeting(name)}</h1>
+      <div className={styles.subheading}>
+        Here&apos;s what you&apos;ve been listening to lately.
+      </div>
     </div>
     <Link
       href="/"
@@ -53,7 +58,7 @@ const header = (
   </div>
 );
 
-const UserDevPage = ({ tracks }: UserDevPageProps) => {
+const UserDevPage = ({ tracks, profile }: UserDevPageProps) => {
   const [term, setTerm] = useState<SpotifyTerm>('medium_term');
   const [favorites, setFavorites] = useState<SpotifyTrack[]>([]);
   const { hostRef, play, isPlaying } = useSpotifyEmbed(tracks[0]?.id ?? null);
@@ -126,7 +131,7 @@ const UserDevPage = ({ tracks }: UserDevPageProps) => {
   return (
     <>
       <div className={styles.view}>
-        {header}
+        <Header name={profile.display_name} />
         <TabView>
           <TabPanel header="Top Tracks">
             <div className={styles.toolbar}>

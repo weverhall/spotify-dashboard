@@ -87,14 +87,21 @@
   padding: 1rem 2rem 1.5rem 21.5px;
 }
 
+.headerText {
+  min-width: 0;
+}
+
 .heading {
-  margin: 0 0 0.1rem;
+  margin: 0 0 0.0rem;
   font-size: 2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .subheading {
-  margin-left: 4px;
-  font-size: 1.3rem;
+  margin-left: 1px;
+  font-size: 1.35rem;
   font-weight: 150;
 }
 

@@ -49,7 +49,7 @@ export const SpotifyTokenSchema = z.object({
 
 export const SpotifyProfileSchema = z.object({
   id: z.string(),
-  display_name: z.string().optional(),
+  display_name: z.string().nullish(),
   email: z.string().optional(),
 });
 
