@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { SpotifyUserTracksSchema, type SpotifyTrack, type Ranked } from '../lib/types/schemas';
-import styles from '../stats/stats.module.css';
+import styles from '../styles/stats.module.css';
 
 const header = (
   <div style={{ display: 'flex', alignItems: 'center', gap: 'calc(1rem - 1px)' }}>

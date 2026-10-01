@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import 'primereact/resources/themes/lara-light-purple/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
-import './globals.css';
+import './styles/globals.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',

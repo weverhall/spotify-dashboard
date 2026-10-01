@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import UserDevPage from '../components/UserDevPage';
 import { SpotifyUserTracksSchema } from '../lib/types/schemas';
 import fixture from '../../tests/fixtures/userTracks.json';
-import styles from './dev.module.css';
+import styles from '../styles/dev.module.css';
 
 export const metadata: Metadata = {
   title: 'Dev',

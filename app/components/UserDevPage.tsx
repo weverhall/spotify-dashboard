@@ -9,7 +9,7 @@ import { Button } from 'primereact/button';
 import type { SpotifyTrack, Ranked } from '../lib/types/schemas';
 import { useSpotifyEmbed } from '../lib/hooks/useSpotifyEmbed';
 import { PlayIcon, PauseIcon, ArrowUturnLeftIcon } from './ui/icons';
-import styles from '../dev/dev.module.css';
+import styles from '../styles/dev.module.css';
 
 type UserDevPageProps = {
   tracks: Ranked<SpotifyTrack>[];

@@ -3,7 +3,7 @@ export const revalidate = 86400;
 import TrendingTracks from './components/TrendingTracks';
 import { getCachedTrendingTracks } from './lib/services/fetchTracks';
 import { getChartMovement } from './lib/services/chartHistory';
-import styles from './home.module.css';
+import styles from './styles/home.module.css';
 import Image from 'next/image';
 
 const Home = async () => {
