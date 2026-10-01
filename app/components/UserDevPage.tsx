@@ -117,7 +117,14 @@ const UserDevPage = ({ tracks }: UserDevPageProps) => {
               emptyMessage=" "
             />
           </TabPanel>
-          <TabPanel header={`All-time Favorites (${favorites.length})`}>
+          <TabPanel
+            header={
+              <>
+                All-time Favorites
+                {favorites.length > 0 && <span className={styles.count}>{favorites.length}</span>}
+              </>
+            }
+          >
             {favorites.length === 0 ? (
               <p className={styles.empty}>No favorites yet. Tap ♥ on a track to add it.</p>
             ) : (
