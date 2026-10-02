@@ -17,7 +17,7 @@ jobs:
         max-attempts: 10
         retry-delay: 20s
 
-  cache-tracks:
+  update-chart:
     needs: cold-start
     timeout-minutes: 5
     runs-on: ubuntu-24.04

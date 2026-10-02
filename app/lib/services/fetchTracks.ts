@@ -1,16 +1,21 @@
 import {
   SpotifyUserTracksSchema,
-  SpotifyUserTracks,
-  SpotifyTerm,
-  LastfmTracksSchema,
-  LastfmTracks,
+  SpotifyTermSchema,
+  LastfmChartSchema,
+  type SpotifyUserTracks,
+  type SpotifyTerm,
+  type Ranked,
+  type LastfmTracks,
+  type TracksByTerm,
 } from '../types/schemas';
 import { env } from '../utils/config';
 import { getLatestSnapshot } from './chartHistory';
 
+const withRank = <T>(items: T[]): Ranked<T>[] => items.map((item, i) => ({ ...item, rank: i + 1 }));
+
 export const getUserTracks = async (
   accessToken: string,
-  term: SpotifyTerm = 'medium_term'
+  term: SpotifyTerm
 ): Promise<SpotifyUserTracks> => {
   const spotifyParams = new URLSearchParams({
     limit: '20',
@@ -26,10 +31,19 @@ export const getUserTracks = async (
 
   if (!res.ok) {
     const text = await res.text();
-    throw new Error(`failed to fetch user tracks: ${res.status} ${text}`);
+    throw new Error(`failed to fetch user tracks (${term}): ${res.status} ${text}`);
   }
 
   return SpotifyUserTracksSchema.parse(await res.json());
+};
+
+export const getUserTracksByTerm = async (accessToken: string): Promise<TracksByTerm> => {
+  const entries = await Promise.all(
+    SpotifyTermSchema.options.map(
+      async (term) => [term, withRank((await getUserTracks(accessToken, term)).items)] as const
+    )
+  );
+  return Object.fromEntries(entries) as TracksByTerm;
 };
 
 export const getTrendingTracks = async (): Promise<LastfmTracks> => {
@@ -40,17 +54,17 @@ export const getTrendingTracks = async (): Promise<LastfmTracks> => {
     limit: '50',
   });
 
-  const res = await fetch(`http://ws.audioscrobbler.com/2.0/?${lastfmParams.toString()}`);
+  const res = await fetch(`https://ws.audioscrobbler.com/2.0/?${lastfmParams.toString()}`);
 
   if (!res.ok) {
     const text = await res.text();
     throw new Error(`failed to fetch trending tracks: ${res.status} ${text}`);
   }
 
-  return LastfmTracksSchema.parse((await res.json()).tracks.track);
+  return LastfmChartSchema.parse(await res.json()).tracks.track;
 };
 
-export const getCachedTrendingTracks = async (): Promise<LastfmTracks> => {
+export const getStoredTrendingTracks = async (): Promise<LastfmTracks> => {
   try {
     const latest = await getLatestSnapshot();
     if (latest) return latest.tracks;

@@ -1,13 +1,13 @@
 export const revalidate = 86400;
 
 import TrendingTracks from './components/TrendingTracks';
-import { getCachedTrendingTracks } from './lib/services/fetchTracks';
+import { getStoredTrendingTracks } from './lib/services/fetchTracks';
 import { getChartMovement } from './lib/services/chartHistory';
 import styles from './styles/home.module.css';
 import Image from 'next/image';
 
 const HomePage = async () => {
-  const tracks = await getCachedTrendingTracks();
+  const tracks = await getStoredTrendingTracks();
   const movement = await getChartMovement(tracks);
 
   return (

@@ -17,6 +17,12 @@ const LastfmTrackSchema = z.object({
 
 export const LastfmTracksSchema = z.array(LastfmTrackSchema);
 
+export const LastfmChartSchema = z.object({
+  tracks: z.object({ track: LastfmTracksSchema }),
+});
+
+export const ChartMovementSchema = z.union([z.number(), z.literal('new')]);
+
 const SpotifyArtistSchema = z.object({
   id: z.string().nullable(),
   name: z.string(),
@@ -69,8 +75,6 @@ export const SnapshotSchema = z.object({
   tracks: LastfmTracksSchema,
 });
 
-export const ChartMovementSchema = z.union([z.number(), z.literal('new')]);
-
 export const EnvironmentSchema = z.object({
   BASE_URL: z.url(),
   REDIRECT_URI: z.url(),
@@ -85,6 +89,8 @@ export const EnvironmentSchema = z.object({
 export type LastfmArtist = z.infer<typeof LastfmArtistSchema>;
 export type LastfmTrack = z.infer<typeof LastfmTrackSchema>;
 export type LastfmTracks = z.infer<typeof LastfmTracksSchema>;
+export type LastfmChart = z.infer<typeof LastfmChartSchema>;
+export type ChartMovement = z.infer<typeof ChartMovementSchema>;
 export type SpotifyTrack = z.infer<typeof SpotifyTrackSchema>;
 export type SpotifyUserTracks = z.infer<typeof SpotifyUserTracksSchema>;
 export type SpotifyToken = z.infer<typeof SpotifyTokenSchema>;
@@ -93,6 +99,6 @@ export type SpotifyTerm = z.infer<typeof SpotifyTermSchema>;
 export type Cookie = z.infer<typeof CookieSchema>;
 export type Session = z.infer<typeof SessionSchema>;
 export type Snapshot = z.infer<typeof SnapshotSchema>;
-export type ChartMovement = z.infer<typeof ChartMovementSchema>;
 export type Environment = z.infer<typeof EnvironmentSchema>;
 export type Ranked<T> = T & { rank: number };
+export type TracksByTerm = Record<SpotifyTerm, Ranked<SpotifyTrack>[]>;

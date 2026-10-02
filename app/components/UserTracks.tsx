@@ -7,14 +7,20 @@ import { DataScroller } from 'primereact/datascroller';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { SelectButton } from 'primereact/selectbutton';
 import { Button } from 'primereact/button';
-import type { SpotifyTrack, SpotifyProfile, Ranked, SpotifyTerm } from '../lib/types/schemas';
+import type {
+  SpotifyTrack,
+  SpotifyProfile,
+  Ranked,
+  SpotifyTerm,
+  TracksByTerm,
+} from '../lib/types/schemas';
 import { useSpotifyEmbed } from '../lib/hooks/useSpotifyEmbed';
 import { PlayIcon, PauseIcon, ArrowUturnLeftIcon } from './ui/Icons';
 import RotatingWord from './ui/RotatingWord';
 import styles from '../styles/my-tracks.module.css';
 
 type UserTracksProps = {
-  tracks: Ranked<SpotifyTrack>[];
+  tracksByTerm: TracksByTerm;
   profile: SpotifyProfile;
 };
 
@@ -68,10 +74,10 @@ const Header = ({ name }: { name?: string | null }) => (
   </div>
 );
 
-const UserTracks = ({ tracks, profile }: UserTracksProps) => {
+const UserTracks = ({ tracksByTerm, profile }: UserTracksProps) => {
   const [term, setTerm] = useState<SpotifyTerm>('medium_term');
   const [favorites, setFavorites] = useState<SpotifyTrack[]>([]);
-  const { hostRef, play, isPlaying } = useSpotifyEmbed(tracks[0]?.id ?? null);
+  const { hostRef, play, isPlaying } = useSpotifyEmbed(tracksByTerm.medium_term[0]?.id ?? null);
 
   const isFavorite = (id: string) => favorites.some((f) => f.id === id);
 
@@ -156,7 +162,8 @@ const UserTracks = ({ tracks, profile }: UserTracksProps) => {
               />
             </div>
             <DataScroller
-              value={tracks}
+              key={term}
+              value={tracksByTerm[term]}
               itemTemplate={(track: Ranked<SpotifyTrack>) => row(track, track.rank)}
               rows={20}
               emptyMessage=" "
