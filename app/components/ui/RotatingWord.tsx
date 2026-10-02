@@ -13,7 +13,7 @@ const nextRandomIndex = (current: number, length: number) => {
   return next >= current ? next + 1 : next;
 };
 
-const RotatingWord = ({ words, interval = 5000 }: RotatingWordProps) => {
+const RotatingWord = ({ words, interval = 7500 }: RotatingWordProps) => {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {

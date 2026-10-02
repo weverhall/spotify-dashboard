@@ -27,14 +27,7 @@ const TERM_OPTIONS: TermOption[] = [
   { label: '1 year', value: 'long_term' },
 ];
 
-const ROTATING_WORDS = [
-  'listening',
-  'jamming',
-  'grooving',
-  'vibing',
-  'dancing',
-  'studying',
-] as const;
+const ROTATING_WORDS = ['listening', 'jamming', 'grooving', 'vibing', 'dancing'] as const;
 
 const termItemTemplate = (option: TermOption) => (
   <span className={styles.termLabel}>{option.label}</span>
@@ -157,7 +150,6 @@ const UserTracks = ({ tracksByTerm, profile }: UserTracksProps) => {
               />
             </div>
             <DataScroller
-              key={term}
               value={tracksByTerm[term]}
               itemTemplate={(track: Ranked<SpotifyTrack>) => row(track, track.rank)}
               rows={20}
