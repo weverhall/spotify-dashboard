@@ -22,7 +22,7 @@ export const LastfmChartSchema = z.object({
   tracks: z.object({ track: LastfmTracksSchema }),
 });
 
-export const ChartMovementSchema = z.union([z.number(), z.literal('new')]);
+export const LastfmChartMovementSchema = z.union([z.number(), z.literal('new')]);
 
 const SpotifyArtistSchema = z.object({
   id: z.string().nullable(),
@@ -30,10 +30,23 @@ const SpotifyArtistSchema = z.object({
   href: z.string().optional(),
 });
 
+const SpotifyAlbumCoverSchema = z.object({
+  url: z.url(),
+  width: z.number().nullable(),
+  height: z.number().nullable(),
+});
+
+const SpotifyAlbumSchema = z.object({
+  name: z.string(),
+  images: z.array(SpotifyAlbumCoverSchema),
+  external_urls: z.object({ spotify: z.url() }),
+});
+
 const SpotifyTrackSchema = z.object({
   id: z.string().nullable(),
   name: z.string(),
   artists: z.array(SpotifyArtistSchema),
+  album: SpotifyAlbumSchema,
   href: z.string().optional(),
 });
 
@@ -91,8 +104,9 @@ export type LastfmArtist = z.infer<typeof LastfmArtistSchema>;
 export type LastfmTrack = z.infer<typeof LastfmTrackSchema>;
 export type LastfmTracks = z.infer<typeof LastfmTracksSchema>;
 export type LastfmChart = z.infer<typeof LastfmChartSchema>;
-export type ChartMovement = z.infer<typeof ChartMovementSchema>;
+export type LastfmChartMovement = z.infer<typeof LastfmChartMovementSchema>;
 export type SpotifyTrack = z.infer<typeof SpotifyTrackSchema>;
+export type SpotifyAlbumCover = z.infer<typeof SpotifyAlbumCoverSchema>;
 export type SpotifyUserTracks = z.infer<typeof SpotifyUserTracksSchema>;
 export type SpotifyToken = z.infer<typeof SpotifyTokenSchema>;
 export type SpotifyProfile = z.infer<typeof SpotifyProfileSchema>;

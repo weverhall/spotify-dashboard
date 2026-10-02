@@ -5,7 +5,7 @@ import {
   LastfmTracks,
   LastfmTrack,
   Snapshot,
-  ChartMovement,
+  LastfmChartMovement,
   SnapshotSchema,
 } from '../types/schemas';
 
@@ -47,7 +47,7 @@ const trackKey = (track: LastfmTrack): string =>
 export const calculateChartMovement = (
   today: LastfmTracks,
   previous: LastfmTracks
-): ChartMovement[] => {
+): LastfmChartMovement[] => {
   const previousRanks = new Map(previous.map((track, i) => [trackKey(track), i + 1]));
 
   return today.map((track, i) => {
@@ -58,7 +58,7 @@ export const calculateChartMovement = (
 
 export const getChartMovement = async (
   tracks: LastfmTracks
-): Promise<ChartMovement[] | undefined> => {
+): Promise<LastfmChartMovement[] | undefined> => {
   try {
     const previous = await getPreviousSnapshot();
     if (!previous) return undefined;

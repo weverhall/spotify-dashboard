@@ -7,7 +7,13 @@ import { DataScroller } from 'primereact/datascroller';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { SelectButton } from 'primereact/selectbutton';
 import { Button } from 'primereact/button';
-import type { SpotifyTrack, SpotifyProfile, SpotifyTerm, TracksByTerm } from '../lib/types/schemas';
+import type {
+  SpotifyTrack,
+  SpotifyProfile,
+  SpotifyTerm,
+  SpotifyAlbumCover,
+  TracksByTerm,
+} from '../lib/types/schemas';
 import type { Ranked } from '../lib/utils/rank';
 import { useSpotifyEmbed } from '../lib/hooks/useSpotifyEmbed';
 import { PlayIcon, PauseIcon, ArrowUturnLeftIcon } from './ui/Icons';
@@ -28,6 +34,14 @@ const TERM_OPTIONS: TermOption[] = [
 ];
 
 const ROTATING_WORDS = ['listening', 'jamming', 'grooving', 'vibing', 'dancing'] as const;
+
+const pickAlbumCover = (
+  images: SpotifyAlbumCover[],
+  minSize: number
+): SpotifyAlbumCover | undefined => {
+  const sorted = [...images].sort((a, b) => (a.width ?? 0) - (b.width ?? 0));
+  return sorted.find((image) => (image.width ?? 0) >= minSize) ?? sorted.at(-1);
+};
 
 const termItemTemplate = (option: TermOption) => (
   <span className={styles.termLabel}>{option.label}</span>
@@ -79,6 +93,7 @@ const UserTracks = ({ tracksByTerm, profile }: UserTracksProps) => {
     const playing = id ? isPlaying(id) : false;
     const favorite = id ? isFavorite(id) : false;
     const artists = track.artists.map((a) => a.name).join(', ');
+    const cover = pickAlbumCover(track.album.images, 160);
 
     const playClassName = [
       styles.play,
@@ -104,7 +119,26 @@ const UserTracks = ({ tracksByTerm, profile }: UserTracksProps) => {
           )}
         </div>
 
-        <div className={styles.cover} />
+        <a
+          className={styles.coverLink}
+          href={track.album.external_urls.spotify}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Open ${track.album.name} on Spotify`}
+        >
+          {cover ? (
+            <Image
+              className={styles.cover}
+              src={cover.url}
+              alt=""
+              width={80}
+              height={80}
+              unoptimized
+            />
+          ) : (
+            <div className={styles.cover} />
+          )}
+        </a>
 
         <div className={styles.text}>
           <div className={styles.title} title={track.name}>

@@ -8,7 +8,7 @@ import { SpotifyProfileSchema } from '../lib/types/schemas';
 import styles from '../styles/my-tracks.module.css';
 
 export const metadata: Metadata = {
-  title: 'My Tracks',
+  title: 'My Spotify Tracks',
 };
 
 const mockProfile = SpotifyProfileSchema.parse({ id: 'dev-user', display_name: 'Dev' });

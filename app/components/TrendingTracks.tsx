@@ -8,14 +8,14 @@ import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import { MultiSelect } from 'primereact/multiselect';
 import Image from 'next/image';
-import type { LastfmTrack, LastfmTracks, ChartMovement } from '../lib/types/schemas';
+import type { LastfmTrack, LastfmTracks, LastfmChartMovement } from '../lib/types/schemas';
 import { withRank, type Ranked } from '../lib/utils/rank';
 
 type RankedTrack = Ranked<LastfmTrack>;
 
 type TrendingTracksProps = {
   tracks: LastfmTracks;
-  movement?: ChartMovement[];
+  movement?: LastfmChartMovement[];
 };
 
 const getArtistLink = (track: RankedTrack): string =>
@@ -26,7 +26,7 @@ const formatPlaycount = (playcount: string): number => {
   return Math.round(count / 1000);
 };
 
-const formatChartMovement = (movement: ChartMovement) => {
+const formatChartMovement = (movement: LastfmChartMovement) => {
   if (movement === 'new') return <span style={{ color: 'purple' }}>New!</span>;
   if (movement > 0)
     return (

@@ -1,14 +1,24 @@
-import {
+import type {
   SpotifyTrack,
   SpotifyUserTracks,
   LastfmTrack,
   LastfmArtist,
 } from '../../app/lib/types/schemas';
 
+export const createSpotifyAlbumMock = (
+  overrides: Partial<SpotifyTrack['album']> = {}
+): SpotifyTrack['album'] => ({
+  name: 'Album 1',
+  images: [{ url: 'https://i.scdn.co/image/album-300', width: 300, height: 300 }],
+  external_urls: { spotify: 'https://open.spotify.com/album/1' },
+  ...overrides,
+});
+
 export const createSpotifyTrackMock = (overrides: Partial<SpotifyTrack> = {}): SpotifyTrack => ({
   id: '1',
   name: 'Track 1',
   artists: [{ id: '1', name: 'Artist' }],
+  album: createSpotifyAlbumMock(),
   ...overrides,
 });
 

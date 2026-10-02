@@ -364,6 +364,28 @@
   white-space: nowrap;
 }
 
+.cover {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  background: #e9eee9;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  object-fit: cover;
+  display: block;
+}
+
+.coverLink {
+  display: block;
+  flex-shrink: 0;
+  border-radius: 8px;
+}
+
+.coverLink:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .word {
     animation: none;
@@ -395,5 +417,9 @@
   .title,
   .artists {
     white-space: normal;
+  }
+
+  .coverLink {
+    border-radius: 4px;
   }
 }
