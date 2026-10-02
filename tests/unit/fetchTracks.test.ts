@@ -18,7 +18,7 @@ describe('getUserTracks (unit/stub)', () => {
     const payload = createSpotifyUserTracksMock();
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(createFetchSuccessMock(payload)));
 
-    await getUserTracks('testToken');
+    await getUserTracks('testToken', 'medium_term');
 
     expect(fetch).toHaveBeenCalledWith(
       expect.stringContaining(
@@ -33,9 +33,7 @@ describe('getUserTracks (unit/stub)', () => {
   it('throws when fetch fails', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(createFetchFailureMock('Unauthorized')));
 
-    await expect(getUserTracks('testToken')).rejects.toThrow(
-      'failed to fetch user tracks: 401 Unauthorized'
-    );
+    await expect(getUserTracks('testToken', 'medium_term')).rejects.toThrow(/medium_term.*401/);
   });
 
   describe('throws when received track data is invalid', () => {
@@ -60,7 +58,7 @@ describe('getUserTracks (unit/stub)', () => {
 
       vi.stubGlobal('fetch', vi.fn().mockResolvedValue(createFetchSuccessMock(payload)));
 
-      await expect(getUserTracks('testToken')).rejects.toThrow(ZodError);
+      await expect(getUserTracks('testToken', 'medium_term')).rejects.toThrow(ZodError);
     });
   });
 });

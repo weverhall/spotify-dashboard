@@ -4,7 +4,7 @@ import lastfmTopTracks from '../fixtures/trendingTracks.json';
 
 describe('getUserTracks (integration/msw)', () => {
   it('returns mocked user track', async () => {
-    const data = await getUserTracks('testToken');
+    const data = await getUserTracks('testToken', 'medium_term');
 
     expect(Array.isArray(data.items)).toBe(true);
     expect(data.items).toHaveLength(1);

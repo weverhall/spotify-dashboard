@@ -3,7 +3,7 @@ import lastfmTopTracks from '../../fixtures/trendingTracks.json';
 import { createSpotifyUserTracksMock } from '../../factories/tracks';
 
 export const handlers = [
-  http.get('http://ws.audioscrobbler.com/2.0/', ({ request }) => {
+  http.get('https://ws.audioscrobbler.com/2.0/', ({ request }) => {
     const method = new URL(request.url).searchParams.get('method');
 
     if (method === 'chart.gettoptracks') {
