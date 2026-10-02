@@ -7,16 +7,22 @@ import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from 'primereact/inputtext';
 import { MultiSelect } from 'primereact/multiselect';
-import type { LastfmTrack, LastfmTracks, ChartMovement, Ranked } from '../lib/types/schemas';
 import Image from 'next/image';
+import type { LastfmTrack, LastfmTracks, ChartMovement } from '../lib/types/schemas';
+import { withRank, type Ranked } from '../lib/utils/rank';
 
-const getArtistLink = (artistName: string): string => {
-  const formatted = encodeURIComponent(artistName.replace(/ /g, '+'));
-  return `https://www.last.fm/music/${formatted}`;
+type RankedTrack = Ranked<LastfmTrack>;
+
+type TrendingTracksProps = {
+  tracks: LastfmTracks;
+  movement?: ChartMovement[];
 };
 
-const formatPlaycount = (playcount?: string): number => {
-  const count = parseInt(playcount ?? '0', 10) || 0;
+const getArtistLink = (track: RankedTrack): string =>
+  track.artist.url ?? `https://www.last.fm/music/${encodeURIComponent(track.artist.name)}`;
+
+const formatPlaycount = (playcount: string): number => {
+  const count = parseInt(playcount, 10) || 0;
   return Math.round(count / 1000);
 };
 
@@ -37,16 +43,9 @@ const formatChartMovement = (movement: ChartMovement) => {
   return '–';
 };
 
-type RankedTrack = Ranked<LastfmTrack>;
-
 const sortByNumber = (e: ColumnSortEvent, getValue: (track: RankedTrack) => number) => {
   const order = e.order === -1 ? -1 : 1;
   return [...(e.data as RankedTrack[])].sort((a, b) => (getValue(a) - getValue(b)) * order);
-};
-
-type TrendingTracksProps = {
-  tracks: LastfmTracks;
-  movement?: ChartMovement[];
 };
 
 const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
@@ -56,13 +55,10 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
   const getMovementSortValue = (rank: number): number => {
     if (!movement) return 0;
     const value = movement[rank - 1];
-    return typeof value === 'number' ? value : 100;
+    return typeof value === 'number' ? value : Number.MAX_SAFE_INTEGER;
   };
 
-  const rankedTracks: RankedTrack[] = tracks.map((track, i) => ({
-    ...track,
-    rank: i + 1,
-  }));
+  const rankedTracks = withRank(tracks);
 
   const artistNames = [...new Set(tracks.map((track) => track.artist.name))];
   const countTracks = (name: string) => tracks.filter((track) => track.artist.name === name).length;
@@ -120,11 +116,10 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
   return (
     <DataTable
       header={header}
-      loading={!tracks}
       globalFilter={filter}
       globalFilterFields={['artist.name', 'name']}
       value={visibleTracks}
-      dataKey={(track) => track.mbid ?? track.name}
+      dataKey="rank"
       size="small"
       showGridlines
       removableSort
@@ -137,7 +132,9 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
         sortField="trend"
         sortFunction={(e) => sortByNumber(e, (track) => getMovementSortValue(track.rank))}
         style={{ width: '8%' }}
-        body={(rowData) => (movement ? formatChartMovement(movement[rowData.rank - 1]) : null)}
+        body={(track: RankedTrack) =>
+          movement ? formatChartMovement(movement[track.rank - 1]) : null
+        }
       />
 
       <Column
@@ -145,14 +142,11 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
         header="Artist"
         sortable
         style={{ width: '22%' }}
-        body={(rowData) => {
-          const artistLink = getArtistLink(rowData.artist.name);
-          return (
-            <a href={artistLink} target="_blank" rel="noopener noreferrer">
-              {rowData.artist.name}
-            </a>
-          );
-        }}
+        body={(track: RankedTrack) => (
+          <a href={getArtistLink(track)} target="_blank" rel="noopener noreferrer">
+            {track.artist.name}
+          </a>
+        )}
       />
 
       <Column
@@ -160,9 +154,9 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
         header="Track"
         sortable
         style={{ width: '33%' }}
-        body={(rowData) => (
-          <a href={String(rowData.url ?? '#')} target="_blank" rel="noopener noreferrer">
-            {rowData.name}
+        body={(track: RankedTrack) => (
+          <a href={track.url} target="_blank" rel="noopener noreferrer">
+            {track.name}
           </a>
         )}
       />
@@ -172,7 +166,7 @@ const TrendingTracks = ({ tracks, movement }: TrendingTracksProps) => {
         header="All-time playcount (in thousands)"
         sortable
         sortFunction={(e) => sortByNumber(e, (track) => Number(track.playcount))}
-        body={(rowData) => formatPlaycount(rowData.playcount)}
+        body={(track: RankedTrack) => formatPlaycount(track.playcount)}
       />
     </DataTable>
   );

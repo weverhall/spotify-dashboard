@@ -4,14 +4,12 @@ import {
   LastfmChartSchema,
   type SpotifyUserTracks,
   type SpotifyTerm,
-  type Ranked,
   type LastfmTracks,
   type TracksByTerm,
 } from '../types/schemas';
+import { withRank } from '../utils/rank';
 import { env } from '../utils/config';
 import { getLatestSnapshot } from './chartHistory';
-
-const withRank = <T>(items: T[]): Ranked<T>[] => items.map((item, i) => ({ ...item, rank: i + 1 }));
 
 export const getUserTracks = async (
   accessToken: string,

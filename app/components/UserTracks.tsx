@@ -7,13 +7,8 @@ import { DataScroller } from 'primereact/datascroller';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { SelectButton } from 'primereact/selectbutton';
 import { Button } from 'primereact/button';
-import type {
-  SpotifyTrack,
-  SpotifyProfile,
-  Ranked,
-  SpotifyTerm,
-  TracksByTerm,
-} from '../lib/types/schemas';
+import type { SpotifyTrack, SpotifyProfile, SpotifyTerm, TracksByTerm } from '../lib/types/schemas';
+import type { Ranked } from '../lib/utils/rank';
 import { useSpotifyEmbed } from '../lib/hooks/useSpotifyEmbed';
 import { PlayIcon, PauseIcon, ArrowUturnLeftIcon } from './ui/Icons';
 import RotatingWord from './ui/RotatingWord';

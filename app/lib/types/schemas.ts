@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { type Ranked } from '../utils/rank';
 
 const LastfmArtistSchema = z.object({
   name: z.string(),
@@ -100,5 +101,4 @@ export type Cookie = z.infer<typeof CookieSchema>;
 export type Session = z.infer<typeof SessionSchema>;
 export type Snapshot = z.infer<typeof SnapshotSchema>;
 export type Environment = z.infer<typeof EnvironmentSchema>;
-export type Ranked<T> = T & { rank: number };
 export type TracksByTerm = Record<SpotifyTerm, Ranked<SpotifyTrack>[]>;
