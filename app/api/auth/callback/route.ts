@@ -1,32 +1,42 @@
 import { NextResponse } from 'next/server';
 import { env } from '../../../lib/utils/config';
-import getSpotifyToken from '../../../lib/auth/token';
+import { getSpotifyToken } from '../../../lib/auth/token';
 import { generateSessionID, storeSession } from '../../../lib/auth/session';
 import { consumeOAuthState } from '../../../lib/auth/state';
+import { getUserProfile } from '../../../lib/services/fetchProfile';
 
 export const GET = async (req: Request) => {
   const { searchParams } = new URL(req.url);
   const code = searchParams.get('code');
   const error = searchParams.get('error');
   const state = searchParams.get('state');
-  const redirectResponse = NextResponse.redirect(`${env.BASE_URL}/my-tracks`);
 
-  if (error || !code || !state) return redirectResponse;
+  const failureResponse = NextResponse.redirect(env.BASE_URL);
+
+  if (error || !code || !state) return failureResponse;
 
   const isValidState = await consumeOAuthState(state);
-  if (!isValidState) return redirectResponse;
+  if (!isValidState) return failureResponse;
 
-  const token = await getSpotifyToken(code);
-  const sessionID: string = generateSessionID();
-  await storeSession(sessionID, token);
+  try {
+    const token = await getSpotifyToken(code);
+    const profile = await getUserProfile(token.access_token);
 
-  redirectResponse.cookies.set('session_id', sessionID, {
-    httpOnly: true,
-    secure: true,
-    path: '/',
-    sameSite: 'lax',
-    maxAge: 3600,
-  });
+    const sessionID = generateSessionID();
+    await storeSession(sessionID, { ...token, user_id: profile.id });
 
-  return redirectResponse;
+    const successResponse = NextResponse.redirect(`${env.BASE_URL}/my-tracks`);
+    successResponse.cookies.set('session_id', sessionID, {
+      httpOnly: true,
+      secure: true,
+      path: '/',
+      sameSite: 'lax',
+      maxAge: 3600,
+    });
+
+    return successResponse;
+  } catch (err) {
+    console.error('failed to complete spotify login:', err);
+    return failureResponse;
+  }
 };

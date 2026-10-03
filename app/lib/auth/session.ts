@@ -1,26 +1,31 @@
 import crypto from 'crypto';
-import { SpotifyTokenSchema, SpotifyToken } from '../types/schemas';
+import { SpotifySessionSchema, type SpotifySession } from '../types/schemas';
 import { getRedisClient } from '../utils/redis';
+import { getSessionID } from './cookie';
 
 export const generateSessionID = (): string => crypto.randomBytes(32).toString('hex');
 
-export const storeSession = async (sessionID: string, token: SpotifyToken): Promise<void> => {
+export const storeSession = async (sessionID: string, session: SpotifySession): Promise<void> => {
   const redis = await getRedisClient();
-  await redis.set(`session:${sessionID}`, JSON.stringify(token), { EX: 3600 });
+  await redis.set(`session:${sessionID}`, JSON.stringify(session), { EX: 3600 });
 };
 
-export const getSession = async (sessionID: string): Promise<SpotifyToken | null> => {
+const getSession = async (sessionID: string): Promise<SpotifySession | null> => {
   const redis = await getRedisClient();
   const data = await redis.get(`session:${sessionID}`);
   if (!data) return null;
 
   try {
-    const parsed: unknown = JSON.parse(data);
-    return SpotifyTokenSchema.parse(parsed);
+    return SpotifySessionSchema.parse(JSON.parse(data));
   } catch (err) {
-    console.error('failed to parse session from redis or invalid token:', err);
+    console.error('failed to parse session from redis:', err);
     return null;
   }
+};
+
+export const getCurrentSession = async (): Promise<SpotifySession | null> => {
+  const sessionID = await getSessionID();
+  return sessionID ? getSession(sessionID) : null;
 };
 
 export const deleteSession = async (sessionID: string): Promise<void> => {

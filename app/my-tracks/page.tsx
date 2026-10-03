@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import UserTracks from '../components/UserTracks';
-import { getSessionID } from '../lib/auth/cookie';
-import { getSession } from '../lib/auth/session';
+import { getCurrentSession } from '../lib/auth/session';
 import { getUserTracksByTerm } from '../lib/services/fetchTracks';
 import { getUserProfile } from '../lib/services/fetchProfile';
 import styles from '../styles/my-tracks.module.css';
@@ -12,10 +11,7 @@ export const metadata: Metadata = {
 };
 
 const MyTracksPage = async () => {
-  const sessionID = await getSessionID();
-  if (!sessionID) redirect('/');
-
-  const session = await getSession(sessionID);
+  const session = await getCurrentSession();
   if (!session) redirect('/');
 
   const [profile, tracksByTerm] = await Promise.all([

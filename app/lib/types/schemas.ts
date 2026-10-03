@@ -67,6 +67,10 @@ export const SpotifyTokenSchema = z.object({
   scope: z.string(),
 });
 
+export const SpotifySessionSchema = SpotifyTokenSchema.extend({
+  user_id: z.string(),
+});
+
 export const SpotifyProfileSchema = z.object({
   id: z.string(),
   display_name: z.string().nullish(),
@@ -79,11 +83,6 @@ export const SpotifyTermSchema = z.enum(['short_term', 'medium_term', 'long_term
 
 export const CookieSchema = z.object({
   session_id: z.string().length(64),
-});
-
-export const SessionSchema = z.object({
-  authenticated: z.boolean(),
-  expires_in: z.number().optional(),
 });
 
 export const SnapshotSchema = z.object({
@@ -112,10 +111,10 @@ export type SpotifyAlbumCover = z.infer<typeof SpotifyImageSchema>;
 export type SpotifyProfilePicture = z.infer<typeof SpotifyImageSchema>;
 export type SpotifyUserTracks = z.infer<typeof SpotifyUserTracksSchema>;
 export type SpotifyToken = z.infer<typeof SpotifyTokenSchema>;
+export type SpotifySession = z.infer<typeof SpotifySessionSchema>;
 export type SpotifyProfile = z.infer<typeof SpotifyProfileSchema>;
 export type SpotifyTerm = z.infer<typeof SpotifyTermSchema>;
 export type Cookie = z.infer<typeof CookieSchema>;
-export type Session = z.infer<typeof SessionSchema>;
 export type Snapshot = z.infer<typeof SnapshotSchema>;
 export type Environment = z.infer<typeof EnvironmentSchema>;
 export type TracksByTerm = Record<SpotifyTerm, Ranked<SpotifyTrack>[]>;
