@@ -2,12 +2,15 @@ import { connectMongo } from '../utils/mongo';
 import { SnapshotModel } from '../models/snapshot';
 import { getTodayDate } from '../utils/datetime';
 import {
-  LastfmTracks,
-  LastfmTrack,
-  Snapshot,
-  LastfmChartMovement,
   SnapshotSchema,
+  type LastfmTracks,
+  type LastfmTrack,
+  type LastfmChartMovement,
+  type Snapshot,
 } from '../types/schemas';
+
+const trackKey = (track: LastfmTrack): string =>
+  `${track.artist.name} - ${track.name}`.toLowerCase();
 
 export const saveSnapshot = async (
   tracks: LastfmTracks,
@@ -22,27 +25,17 @@ export const saveSnapshot = async (
   return result.upsertedCount > 0;
 };
 
-export const getLatestSnapshot = async (): Promise<Snapshot | null> => {
+export const getRecentSnapshots = async (limit: number): Promise<Snapshot[]> => {
   await connectMongo();
-  const rawSnapshot = await SnapshotModel.findOne().sort({ date: -1 });
-  if (!rawSnapshot) return null;
-
-  return SnapshotSchema.parse(rawSnapshot);
+  const rawSnapshots = await SnapshotModel.find().sort({ date: -1 }).limit(limit).lean();
+  return rawSnapshots.map((raw) => SnapshotSchema.parse(raw));
 };
 
-const getPreviousSnapshot = async (): Promise<Snapshot | null> => {
-  await connectMongo();
-  const rawSnapshot = await SnapshotModel.findOne().sort({ date: -1 }).skip(1);
-  if (!rawSnapshot) return null;
-
-  return SnapshotSchema.parse(rawSnapshot);
-};
+export const getLatestSnapshot = async (): Promise<Snapshot | null> =>
+  (await getRecentSnapshots(1))[0] ?? null;
 
 export const isSameChart = (a: LastfmTracks, b: LastfmTracks): boolean =>
   a.length === b.length && a.every((track, i) => trackKey(track) === trackKey(b[i]));
-
-const trackKey = (track: LastfmTrack): string =>
-  `${track.artist.name} - ${track.name}`.toLowerCase();
 
 export const calculateChartMovement = (
   today: LastfmTracks,
@@ -54,18 +47,4 @@ export const calculateChartMovement = (
     const previousRank = previousRanks.get(trackKey(track));
     return previousRank ? previousRank - (i + 1) : 'new';
   });
-};
-
-export const getChartMovement = async (
-  tracks: LastfmTracks
-): Promise<LastfmChartMovement[] | undefined> => {
-  try {
-    const previous = await getPreviousSnapshot();
-    if (!previous) return undefined;
-
-    return calculateChartMovement(tracks, previous.tracks);
-  } catch (err) {
-    console.error('failed to get chart movement:', err);
-    return undefined;
-  }
 };

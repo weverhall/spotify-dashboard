@@ -5,11 +5,17 @@ import {
   type SpotifyUserTracks,
   type SpotifyTerm,
   type LastfmTracks,
+  type LastfmChartMovement,
   type TracksByTerm,
 } from '../types/schemas';
 import { withRank } from '../utils/rank';
 import { env } from '../utils/config';
-import { getLatestSnapshot } from './chartHistory';
+import { getRecentSnapshots, calculateChartMovement } from './chartHistory';
+
+export type TrendingChart = {
+  tracks: LastfmTracks;
+  movement?: LastfmChartMovement[];
+};
 
 export const getUserTracks = async (
   accessToken: string,
@@ -62,13 +68,18 @@ export const getTrendingTracks = async (): Promise<LastfmTracks> => {
   return LastfmChartSchema.parse(await res.json()).tracks.track;
 };
 
-export const getStoredTrendingTracks = async (): Promise<LastfmTracks> => {
+export const getTrendingChart = async (): Promise<TrendingChart> => {
   try {
-    const latest = await getLatestSnapshot();
-    if (latest) return latest.tracks;
+    const [latest, previous] = await getRecentSnapshots(2);
+    if (latest) {
+      return {
+        tracks: latest.tracks,
+        movement: previous ? calculateChartMovement(latest.tracks, previous.tracks) : undefined,
+      };
+    }
   } catch (err) {
-    console.error('failed to read latest snapshot, fetching live instead:', err);
+    console.error('failed to read snapshots, fetching live instead:', err);
   }
 
-  return getTrendingTracks();
+  return { tracks: await getTrendingTracks() };
 };
