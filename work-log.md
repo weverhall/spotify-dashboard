@@ -38,4 +38,5 @@
 | 29.9.  | 10   | created the first draft of a proper user stats page, added logo and filtering to trending tracks table, started storing trending tracks to mongodb only, improved cron and storing logic |
 | 30.9.  | 5    | polished user stats page UI and UX, also modified env in render, github, and api dashboard in order to change app url to reflect new spotify.fm name |
 | 1.10.  | 7    | continued with improving user tracks page UI and UX, tidied up file structure and naming |
-| total  | 152  |  |
+| 2.10.  | 5    | moved user top tracks fetching server-side and extended it to all three time ranges instead of just medium term, adjusted schema and jsx so that album covers are shown |
+| total  | 157  |  |

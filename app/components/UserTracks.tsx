@@ -12,6 +12,7 @@ import type {
   SpotifyProfile,
   SpotifyTerm,
   SpotifyAlbumCover,
+  SpotifyProfilePicture,
   TracksByTerm,
 } from '../lib/types/schemas';
 import type { Ranked } from '../lib/utils/rank';
@@ -22,7 +23,7 @@ import styles from '../styles/my-tracks.module.css';
 
 type UserTracksProps = {
   tracksByTerm: TracksByTerm;
-  profile: SpotifyProfile;
+  profile: SpotifyProfile | null;
 };
 
 type TermOption = { label: string; value: SpotifyTerm };
@@ -35,10 +36,14 @@ const TERM_OPTIONS: TermOption[] = [
 
 const ROTATING_WORDS = ['listening', 'jamming', 'grooving', 'vibing', 'dancing'] as const;
 
-const pickAlbumCover = (
-  images: SpotifyAlbumCover[],
+const COVER_SIZE = 80;
+const AVATAR_SIZE = 66;
+const BADGE_SIZE = 24;
+
+const pickImage = <T extends SpotifyAlbumCover | SpotifyProfilePicture>(
+  images: T[],
   minSize: number
-): SpotifyAlbumCover | undefined => {
+): T | undefined => {
   const sorted = [...images].sort((a, b) => (a.width ?? 0) - (b.width ?? 0));
   return sorted.find((image) => (image.width ?? 0) >= minSize) ?? sorted.at(-1);
 };
@@ -49,37 +54,70 @@ const termItemTemplate = (option: TermOption) => (
 
 const greeting = (name?: string | null) => (name ? `Hi, ${name}!` : 'Hi there!');
 
-const Header = ({ name }: { name?: string | null }) => (
-  <div className={styles.header}>
-    <a
-      href="https://open.spotify.com"
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Open Spotify"
-    >
-      <Image src="/Primary_Logo_Black_RGB.svg" alt="" width={56} height={56} />
-    </a>
-    <div className={styles.headerText}>
-      <h1 className={styles.heading}>{greeting(name)}</h1>
-      <div className={styles.subheading}>
-        Here&apos;s what you&apos;ve been <RotatingWord words={ROTATING_WORDS} /> to lately.
+const Header = ({ profile }: { profile: SpotifyProfile | null }) => {
+  const avatar = profile ? pickImage(profile.images, AVATAR_SIZE * 2) : undefined;
+  const profileUrl = profile?.external_urls?.spotify;
+
+  return (
+    <div className={styles.header}>
+      <a
+        className={styles.avatarLink}
+        href={profileUrl ?? 'https://open.spotify.com'}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={profileUrl ? 'Open your Spotify profile' : 'Open Spotify'}
+      >
+        {avatar ? (
+          <>
+            <Image
+              className={styles.avatar}
+              src={avatar.url}
+              alt=""
+              width={AVATAR_SIZE}
+              height={AVATAR_SIZE}
+              unoptimized
+            />
+            <Image
+              className={styles.avatarBadge}
+              src="/Primary_Logo_Black_RGB.svg"
+              alt=""
+              width={BADGE_SIZE}
+              height={BADGE_SIZE}
+            />
+          </>
+        ) : (
+          <Image
+            src="/Primary_Logo_Black_RGB.svg"
+            alt=""
+            width={AVATAR_SIZE}
+            height={AVATAR_SIZE}
+          />
+        )}
+      </a>
+      <div className={styles.headerText}>
+        <h1 className={styles.heading}>{greeting(profile?.display_name)}</h1>
+        <div className={styles.subheading}>
+          Here&apos;s what you&apos;ve been <RotatingWord words={ROTATING_WORDS} /> to lately.
+        </div>
       </div>
+      <Link
+        href="/"
+        className={styles.homeLink}
+        aria-label="Back to trending tracks"
+        title="Back to trending tracks"
+      >
+        <ArrowUturnLeftIcon size={24} />
+      </Link>
     </div>
-    <Link
-      href="/"
-      className={styles.homeLink}
-      aria-label="Back to trending tracks"
-      title="Back to trending tracks"
-    >
-      <ArrowUturnLeftIcon size={24} />
-    </Link>
-  </div>
-);
+  );
+};
 
 const UserTracks = ({ tracksByTerm, profile }: UserTracksProps) => {
   const [term, setTerm] = useState<SpotifyTerm>('medium_term');
   const [favorites, setFavorites] = useState<SpotifyTrack[]>([]);
   const { hostRef, play, isPlaying } = useSpotifyEmbed(tracksByTerm.medium_term[0]?.id ?? null);
+
+  const tracks = tracksByTerm[term];
 
   const isFavorite = (id: string) => favorites.some((f) => f.id === id);
 
@@ -93,7 +131,7 @@ const UserTracks = ({ tracksByTerm, profile }: UserTracksProps) => {
     const playing = id ? isPlaying(id) : false;
     const favorite = id ? isFavorite(id) : false;
     const artists = track.artists.map((a) => a.name).join(', ');
-    const cover = pickAlbumCover(track.album.images, 160);
+    const cover = pickImage(track.album.images, COVER_SIZE * 2);
 
     const playClassName = [
       styles.play,
@@ -131,8 +169,8 @@ const UserTracks = ({ tracksByTerm, profile }: UserTracksProps) => {
               className={styles.cover}
               src={cover.url}
               alt=""
-              width={80}
-              height={80}
+              width={COVER_SIZE}
+              height={COVER_SIZE}
               unoptimized
             />
           ) : (
@@ -169,7 +207,7 @@ const UserTracks = ({ tracksByTerm, profile }: UserTracksProps) => {
   return (
     <>
       <div className={styles.view}>
-        <Header name={profile.display_name} />
+        <Header profile={profile} />
         <TabView>
           <TabPanel header="Top Tracks">
             <div className={styles.toolbar}>
@@ -183,12 +221,20 @@ const UserTracks = ({ tracksByTerm, profile }: UserTracksProps) => {
                 aria-label="Time period"
               />
             </div>
-            <DataScroller
-              value={tracksByTerm[term]}
-              itemTemplate={(track: Ranked<SpotifyTrack>) => row(track, track.rank)}
-              rows={20}
-              emptyMessage=" "
-            />
+            {tracks.length === 0 ? (
+              <p className={styles.empty}>
+                No top tracks for this period yet.
+                <br />
+                Try a longer time range.
+              </p>
+            ) : (
+              <DataScroller
+                value={tracks}
+                itemTemplate={(track: Ranked<SpotifyTrack>) => row(track, track.rank)}
+                rows={20}
+                emptyMessage=" "
+              />
+            )}
           </TabPanel>
           <TabPanel
             header={
@@ -199,7 +245,11 @@ const UserTracks = ({ tracksByTerm, profile }: UserTracksProps) => {
             }
           >
             {favorites.length === 0 ? (
-              <p className={styles.empty}>No favorites yet. Tap ♥ on a track to add it.</p>
+              <p className={styles.empty}>
+                No favorites yet.
+                <br />
+                Tap ♥ on a track to add it.
+              </p>
             ) : (
               <DataScroller
                 value={favorites}
